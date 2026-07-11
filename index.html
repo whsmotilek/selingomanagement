@@ -6,65 +6,69 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Лавка · Свежесть под контролем — прототип</title>
 <style>
+  @font-face{font-family:"YS Text";src:url(https://yastatic.net/s3/home/fonts/ys/1/text-regular.woff2) format("woff2");font-weight:400;font-display:swap}
+  @font-face{font-family:"YS Text";src:url(https://yastatic.net/s3/home/fonts/ys/1/text-medium.woff2) format("woff2");font-weight:500;font-display:swap}
+  @font-face{font-family:"YS Text";src:url(https://yastatic.net/s3/home/fonts/ys/1/text-bold.woff2) format("woff2");font-weight:700;font-display:swap}
   :root{
-    --ink:#1C1B19; --sub:#9C9A96; --faint:#C6C4C0;
-    --bg:#F1F0EE; --card:#FFFFFF; --tile:#F6F5F3; --line:#EDEBE8;
-    --yellow:#FFDE40; --yellow-press:#F2D336;
-    --red:#F5523A; --red-bg:#FEEEEB;
-    --green:#1FA95C; --green-bg:#E9F7EF; --green-strip:#DFF3E3; --green-ink:#1E7A46;
-    --orange:#EE8A1F; --orange-bg:#FDF1E1;
-    --blue:#33B8FF;
-    --accent:#7B61FF;
+    --ink:#21201F; --sub:#9E9B98; --faint:#C8C5C1;
+    --bg:#F0EFED; --card:#FFFFFF; --tile:#F6F5F3; --line:#EDEBE8;
+    --yellow:#FCE45B; --yellow2:#FFDE40; --yellow-press:#F2D336;
+    --red:#FC5230; --green:#00B45A; --green-bg:#E8F7EE; --green-strip:#DFF3E3; --green-ink:#1E7A46;
+    --orange:#F28A00; --orange-bg:#FDF1E1;
+    --blue:#40BEFA; --accent:#7B61FF;
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
   html,body{height:100%}
   body{
     font-family:"YS Text",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-    background:#E7E4E0; color:var(--ink);
+    background:#E7E4E0; color:var(--ink); font-weight:400;
     display:flex; align-items:center; justify-content:center; gap:52px;
     min-height:100dvh; padding:24px;
   }
-  .press:active{transform:scale(.965);transition:transform .06s}
+  .press:active{transform:scale(.96);transition:transform .06s}
 
   /* ---------- aside ---------- */
   .aside{max-width:330px}
-  .aside .tag{display:inline-block;font-size:12px;font-weight:600;color:#6B6763;background:#D9D5D0;border-radius:100px;padding:6px 12px;margin-bottom:14px}
-  .aside h1{font-size:28px;letter-spacing:-.5px;line-height:1.12;margin-bottom:10px}
+  .aside .tag{display:inline-block;font-size:12px;font-weight:500;color:#6B6763;background:#D9D5D0;border-radius:100px;padding:6px 12px;margin-bottom:14px}
+  .aside h1{font-size:28px;letter-spacing:-.5px;line-height:1.12;margin-bottom:10px;font-weight:700}
   .aside p.lead{font-size:15px;line-height:1.45;color:#5F5B57;margin-bottom:20px}
   .steps{display:flex;flex-direction:column;gap:7px;margin-bottom:20px}
   .step{display:flex;gap:12px;align-items:center;background:#F3F1EE;border:1px solid transparent;border-radius:16px;padding:11px 14px;cursor:pointer;transition:.15s}
   .step:hover{background:#fff}
   .step.on{background:#fff;border-color:#D6D2CC;box-shadow:0 4px 14px rgba(0,0,0,.06)}
-  .step b{display:block;font-size:14px}
+  .step b{display:block;font-size:14px;font-weight:500}
   .step span{font-size:12.5px;color:var(--sub)}
-  .step .n{flex:0 0 26px;height:26px;border-radius:50%;background:var(--yellow);font-weight:700;font-size:12.5px;display:flex;align-items:center;justify-content:center}
+  .step .n{flex:0 0 26px;height:26px;border-radius:50%;background:var(--yellow2);font-weight:700;font-size:12.5px;display:flex;align-items:center;justify-content:center}
   .hl-toggle{display:flex;align-items:center;gap:10px;font-size:13.5px;color:#5F5B57;cursor:pointer}
   .hl-toggle .sw{width:40px;height:24px;border-radius:100px;background:#D0CCC6;position:relative;transition:.2s}
   .hl-toggle .sw::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.2s}
   body.hl .hl-toggle .sw{background:var(--accent)}
   body.hl .hl-toggle .sw::after{left:19px}
   .aside .foot{margin-top:20px;font-size:12px;color:#8B8783;line-height:1.5}
-  body.hl .nw{outline:2px dashed var(--accent);outline-offset:3px;border-radius:14px}
+
+  /* подсветка новых элементов — рамка по форме элемента, не вылезает за соседей */
+  body.hl .nw{position:relative}
+  body.hl .nw::after{content:"";position:absolute;inset:-2px;border:1.5px dashed var(--accent);border-radius:inherit;pointer-events:none;z-index:5}
 
   /* ---------- phone ---------- */
   .phone{width:390px;height:820px;flex:0 0 auto;background:#0B0B0B;border-radius:56px;padding:11px;box-shadow:0 26px 64px rgba(0,0,0,.30)}
   .glass{position:relative;width:100%;height:100%;background:var(--bg);border-radius:46px;overflow:hidden}
-  .sb{position:absolute;top:0;left:0;right:0;height:46px;z-index:60;display:flex;align-items:center;justify-content:space-between;padding:6px 30px 0;pointer-events:none}
-  .sb .t{font-size:15px;font-weight:700;letter-spacing:.02em}
+  .sb{position:absolute;top:0;left:0;right:0;height:46px;z-index:60;display:flex;align-items:center;justify-content:space-between;padding:8px 30px 0;pointer-events:none}
+  .sb .t{font-size:15px;font-weight:700}
   .sb svg{display:block}
 
   .screen{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--bg);opacity:0;pointer-events:none;transform:translateX(14px);transition:opacity .18s,transform .18s}
   .screen.on{opacity:1;pointer-events:auto;transform:none}
-  .scroll{flex:1;overflow-y:auto;padding:56px 14px 130px;scrollbar-width:none}
+  .scroll{flex:1;overflow-y:auto;padding:54px 12px 130px;scrollbar-width:none}
   .scroll::-webkit-scrollbar{display:none}
 
-  .hdr{display:flex;align-items:center;gap:10px;margin:6px 2px 12px}
-  .rnd{flex:0 0 44px;height:44px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 1px 5px rgba(0,0,0,.06)}
+  .hdr{display:flex;align-items:center;gap:10px;margin:8px 2px 12px}
+  .rnd{flex:0 0 44px;height:44px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 1px 5px rgba(0,0,0,.05)}
   .rnd svg{display:block}
-  .hdr h2{font-size:24px;letter-spacing:-.5px;flex:1;font-weight:700}
+  .hdr h2{font-size:24px;letter-spacing:-.4px;flex:1;font-weight:700}
 
-  .seg{display:flex;background:#E9E7E4;border-radius:100px;padding:3px;margin-bottom:12px}
-  .seg div{flex:1;text-align:center;border-radius:100px;padding:8px 4px;cursor:pointer}
+  .seg{display:flex;background:#E8E6E3;border-radius:100px;padding:3px;margin-bottom:12px}
+  .seg>div{flex:1;text-align:center;border-radius:100px;padding:8px 4px;cursor:pointer}
   .seg b{display:block;font-size:13.5px;font-weight:700;color:#A5A29D}
   .seg span{display:block;font-size:10.5px;color:#B9B6B1}
   .seg .on{background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.07)}
@@ -72,92 +76,93 @@
 
   .chips{display:flex;gap:7px;overflow-x:auto;margin-bottom:14px;scrollbar-width:none}
   .chips::-webkit-scrollbar{display:none}
-  .chip{flex:0 0 auto;display:flex;align-items:center;gap:6px;background:#fff;border-radius:100px;padding:9px 13px;font-size:13.5px;font-weight:600;cursor:pointer}
+  .chip{flex:0 0 auto;display:flex;align-items:center;gap:6px;background:#fff;border-radius:100px;padding:9px 13px;font-size:13.5px;font-weight:500;cursor:pointer;white-space:nowrap}
   .chip.sel{background:var(--ink);color:#fff}
 
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-  .tile{background:var(--card);border-radius:22px;padding:7px 7px 11px;cursor:pointer}
-  .tile .img{position:relative;height:126px;border-radius:17px;background:var(--tile);display:flex;align-items:center;justify-content:center;margin-bottom:7px}
-  .tile .img svg.prod{width:82px;height:82px}
-  .tile .off{position:absolute;left:7px;top:7px;background:var(--red);color:#fff;font-size:11.5px;font-weight:800;border-radius:100px;padding:3px 8px}
-  .tile .add{position:absolute;right:6px;bottom:6px;min-width:36px;height:36px;border-radius:100px;background:#fff;box-shadow:0 2px 9px rgba(0,0,0,.13);display:flex;align-items:center;justify-content:center;gap:9px;font-size:16px;font-weight:700;padding:0 10px;cursor:pointer}
-  .tile .add span{cursor:pointer;color:var(--ink);font-size:18px;line-height:1}
-  .tile .price{font-size:16.5px;font-weight:800;padding:0 4px;letter-spacing:-.2px}
-  .tile .price s{font-size:12.5px;color:var(--faint);font-weight:600;margin-left:4px}
+  .tile{background:var(--card);border-radius:22px;padding:7px 7px 11px;cursor:pointer;display:flex;flex-direction:column}
+  .tile .img{position:relative;height:124px;border-radius:17px;background:var(--tile);display:flex;align-items:center;justify-content:center;margin-bottom:7px}
+  .tile .img svg.prod{width:80px;height:80px}
+  .tile .off{position:absolute;left:7px;top:7px;background:var(--red);color:#fff;font-size:11px;font-weight:700;border-radius:100px;padding:3px 8px}
+  .tile .add{position:absolute;right:6px;bottom:6px;min-width:36px;height:36px;border-radius:100px;background:#fff;box-shadow:0 2px 9px rgba(0,0,0,.13);display:flex;align-items:center;justify-content:center;gap:9px;font-size:15px;font-weight:700;padding:0 10px;cursor:pointer}
+  .tile .add span{cursor:pointer;color:var(--ink);font-size:17px;line-height:1;padding:0 2px}
+  .tile .price{font-size:16.5px;font-weight:700;padding:0 4px;letter-spacing:-.2px}
+  .tile .price s{font-size:12.5px;color:var(--faint);font-weight:500;margin-left:4px}
   .tile .price .dsc{color:var(--red)}
-  .tile .name{font-size:13px;line-height:1.28;padding:3px 4px 7px;min-height:40px;color:var(--ink)}
+  .tile .name{font-size:12.5px;line-height:1.3;padding:3px 4px 7px;color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:39px}
   .tile .name i{font-style:normal;color:var(--faint)}
-  .fresh{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;border-radius:100px;padding:4px 8px;margin:0 4px;cursor:pointer}
-  .fresh.g{background:var(--green-bg);color:var(--green)}
+  .fresh{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:500;border-radius:100px;padding:4px 8px;margin:0 4px;cursor:pointer;white-space:nowrap}
+  .fresh.g{background:var(--green-bg);color:#0E9550}
   .fresh.o{background:var(--orange-bg);color:var(--orange)}
-  .fresh .dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+  .fresh .dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex:0 0 6px}
 
-  .strip{position:absolute;left:0;right:0;bottom:74px;z-index:20;background:var(--green-strip);display:flex;align-items:center;gap:8px;padding:8px 16px;font-size:12.5px;font-weight:700;color:var(--green-ink)}
-  .strip .dash{margin-left:auto;border:1.5px dashed var(--green-ink);border-radius:100px;padding:3px 10px;font-size:11.5px}
+  .strip{position:absolute;left:0;right:0;bottom:73px;z-index:20;background:var(--green-strip);display:flex;align-items:center;gap:8px;padding:8px 16px;font-size:12.5px;font-weight:500;color:var(--green-ink)}
+  .strip .dash{margin-left:auto;border:1.5px dashed #7CBB93;border-radius:100px;padding:3px 10px;font-size:11.5px;font-weight:700}
 
-  .nav{position:absolute;left:0;right:0;bottom:0;z-index:30;background:rgba(241,240,238,.96);backdrop-filter:blur(10px);display:flex;padding:9px 8px 20px;border-top:1px solid var(--line)}
-  .ni{flex:1;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;opacity:.34}
+  .nav{position:absolute;left:0;right:0;bottom:0;z-index:30;background:rgba(240,239,237,.97);backdrop-filter:blur(10px);display:flex;padding:9px 8px 19px;border-top:1px solid var(--line)}
+  .ni{flex:1;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;opacity:.32}
   .ni.on{opacity:1}
-  .ni .bdg{position:absolute;top:-5px;right:24%;min-width:17px;height:17px;border-radius:100px;background:var(--red);color:#fff;font-size:10.5px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 5px}
+  .ni .bdg{position:absolute;top:-5px;right:24%;min-width:17px;height:17px;border-radius:100px;background:var(--red);color:#fff;font-size:10.5px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 5px}
 
   /* product */
-  .crumbs{display:flex;gap:6px;margin:4px 0 10px;align-items:center}
-  .crumb{background:#fff;border-radius:100px;padding:8px 12px;font-size:12.5px;color:#6B6763;font-weight:600}
+  .crumbs{display:flex;gap:6px;margin:6px 0 10px;align-items:center}
+  .crumb{background:#fff;border-radius:100px;padding:8px 12px;font-size:12.5px;color:#6B6763;font-weight:500}
   .pico{margin-left:auto;display:flex;gap:8px}
   .pico .rnd{flex:0 0 40px;height:40px}
-  .hero{background:#fff;border-radius:24px;height:240px;display:flex;align-items:center;justify-content:center;margin-bottom:6px}
-  .hero svg.prod{width:150px;height:150px}
+  .hero{background:#fff;border-radius:24px;height:238px;display:flex;align-items:center;justify-content:center;margin-bottom:6px}
+  .hero svg.prod{width:148px;height:148px}
   .dots{display:flex;gap:5px;justify-content:center;margin-bottom:12px}
   .dots i{width:5px;height:5px;border-radius:50%;background:#D6D2CC}
   .dots i:first-child{background:var(--ink)}
-  .ptitle{font-size:24px;line-height:1.12;letter-spacing:-.5px;font-weight:800;padding:0 4px}
-  .punit{font-size:16px;color:var(--faint);font-weight:600;margin:4px 4px 0}
+  .ptitle{font-size:24px;line-height:1.12;letter-spacing:-.4px;font-weight:700;padding:0 4px}
+  .punit{font-size:16px;color:var(--faint);font-weight:500;margin:4px 4px 0}
 
   .fcard{background:var(--green-bg);border-radius:20px;padding:13px 14px;margin:14px 0 8px;display:flex;align-items:center;gap:12px;cursor:pointer}
   .fcard.short{background:var(--orange-bg)}
   .fcard .ico{flex:0 0 40px;height:40px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center}
-  .fcard .tx{flex:1}
-  .fcard .tx em{display:block;font-style:normal;font-size:11px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.4px}
+  .fcard .tx{flex:1;min-width:0}
+  .fcard .tx em{display:block;font-style:normal;font-size:10.5px;font-weight:700;color:#0E9550;text-transform:uppercase;letter-spacing:.4px}
   .fcard.short .tx em{color:var(--orange)}
-  .fcard .tx b{display:block;font-size:16px;margin:2px 0;letter-spacing:-.2px}
-  .fcard .tx span{font-size:12.5px;color:#6B6763}
+  .fcard .tx b{display:block;font-size:16px;margin:2px 0;letter-spacing:-.2px;font-weight:700}
+  .fcard .tx span{font-size:12px;color:#6B6763}
   .fcard .bar{height:4px;border-radius:4px;background:#fff;margin-top:8px;overflow:hidden}
   .fcard .bar i{display:block;height:100%;background:var(--green);border-radius:4px}
   .fcard.short .bar i{background:var(--orange)}
-  .fcard .chev{color:#B9B5B0;font-size:20px;font-weight:600}
+  .fcard .chev{color:#B9B5B0;font-size:20px;font-weight:500}
 
-  .row{background:#fff;border-radius:18px;padding:14px;display:flex;align-items:center;gap:10px;font-size:14.5px;font-weight:600;margin-bottom:8px;cursor:pointer}
+  .row{background:#fff;border-radius:18px;padding:14px;display:flex;align-items:center;gap:10px;font-size:14.5px;font-weight:500;margin-bottom:8px;cursor:pointer}
   .row .chev{margin-left:auto;color:#C9C6C2}
-  .alisa{width:26px;height:26px;border-radius:50%;background:conic-gradient(from 200deg,#33B8FF,#7B61FF,#B04FFF,#33B8FF);display:flex;align-items:center;justify-content:center}
+  .alisa{width:26px;height:26px;border-radius:50%;background:conic-gradient(from 200deg,#40BEFA,#7B61FF,#B04FFF,#40BEFA);display:flex;align-items:center;justify-content:center;flex:0 0 26px}
   .alisa::after{content:"";width:11px;height:11px;border-radius:50%;background:#fff}
   .revbox{background:#F3F1EE;border-radius:16px;padding:12px 14px;font-size:13px;line-height:1.4;color:#3E3B37;margin-bottom:14px}
-  .sechead{font-size:19px;font-weight:800;letter-spacing:-.3px;margin:16px 4px 10px}
+  .sechead{font-size:19px;font-weight:700;letter-spacing:-.3px;margin:16px 4px 10px}
   .tabs{display:flex;gap:14px;align-items:center;margin:0 4px 10px}
-  .tabai{display:flex;align-items:center;gap:7px;background:#EAF6FE;border-radius:100px;padding:7px 13px;font-size:13.5px;font-weight:700}
-  .tabmut{font-size:13.5px;color:var(--faint);font-weight:600}
+  .tabai{display:flex;align-items:center;gap:7px;background:#EAF6FE;border-radius:100px;padding:7px 13px;font-size:13.5px;font-weight:500;cursor:pointer;border:1.5px solid transparent}
+  .tabai.act{border-color:#9AD7F8}
+  .tabmut{font-size:13.5px;color:var(--faint);font-weight:500;cursor:pointer}
   .comp{background:#F3F1EE;border-radius:16px;padding:13px 14px;margin-bottom:10px}
-  .comp b{display:block;font-size:12px;color:#8B8783;font-weight:600;margin-bottom:5px}
+  .comp b{display:block;font-size:12px;color:#8B8783;font-weight:500;margin-bottom:5px}
   .comp p{font-size:14px;line-height:1.4}
   .comp i{display:block;font-style:normal;font-size:11px;color:#A5A29D;margin-top:8px}
-  .spec{padding:10px 4px;border-bottom:1px solid var(--line)}
-  .spec b{display:block;font-size:12px;color:#8B8783;font-weight:600;margin-bottom:3px}
-  .spec p{font-size:15px;font-weight:600}
+  .spec{padding:11px 4px;border-bottom:1px solid var(--line)}
+  .spec b{display:block;font-size:12px;color:#8B8783;font-weight:500;margin-bottom:3px}
+  .spec p{font-size:15px;font-weight:500}
 
-  .bbar{position:absolute;left:10px;right:10px;bottom:12px;z-index:40;display:flex;align-items:center;gap:10px;background:var(--yellow);border-radius:22px;padding:8px 8px 8px 18px;box-shadow:0 10px 26px rgba(0,0,0,.16);cursor:pointer;min-height:64px}
-  .bbar .p{font-size:19px;font-weight:800;letter-spacing:-.3px}
-  .bbar .p s{font-size:13px;font-weight:600;color:rgba(0,0,0,.38);margin-left:4px}
-  .bbar .lbl{flex:1;text-align:center;font-size:16px;font-weight:700}
-  .bbar .cnt{background:#fff;border-radius:16px;padding:12px 14px;font-size:15px;font-weight:800;display:flex;gap:16px;align-items:center}
+  .bbar{position:absolute;left:10px;right:10px;bottom:12px;z-index:40;display:flex;align-items:center;gap:10px;background:var(--yellow);border-radius:22px;padding:8px 8px 8px 18px;box-shadow:0 10px 26px rgba(0,0,0,.14);cursor:pointer;min-height:64px}
+  .bbar .p{font-size:19px;font-weight:700;letter-spacing:-.3px}
+  .bbar .p s{font-size:13px;font-weight:500;color:rgba(0,0,0,.38);margin-left:4px}
+  .bbar .lbl{flex:1;text-align:center;font-size:16px;font-weight:500}
+  .bbar .cnt{background:#fff;border-radius:16px;padding:12px 14px;font-size:15px;font-weight:700;display:flex;gap:16px;align-items:center}
   .bbar .cnt span{cursor:pointer;font-size:18px;line-height:1;color:var(--ink)}
-  .bbar .coins{position:absolute;top:-12px;right:14px;background:#fff;border-radius:100px;padding:3px 9px;font-size:11.5px;font-weight:800;box-shadow:0 3px 9px rgba(0,0,0,.12);display:flex;gap:4px;align-items:center}
+  .bbar .coins{position:absolute;top:-12px;right:14px;background:#fff;border-radius:100px;padding:3px 9px;font-size:11.5px;font-weight:700;box-shadow:0 3px 9px rgba(0,0,0,.12);display:flex;gap:4px;align-items:center}
 
-  /* sheet */
+  /* sheet + toast */
   .veil{position:absolute;inset:0;background:rgba(28,27,25,.4);z-index:70;opacity:0;pointer-events:none;transition:.2s}
-  .sheet{position:absolute;left:0;right:0;bottom:0;z-index:71;background:#fff;border-radius:30px 30px 0 0;padding:18px 16px 20px;transform:translateY(105%);transition:.3s cubic-bezier(.3,.9,.3,1)}
+  .sheet{position:absolute;left:0;right:0;bottom:0;z-index:71;background:#fff;border-radius:30px 30px 0 0;padding:18px 16px 20px;transform:translateY(105%);transition:.3s cubic-bezier(.3,.9,.3,1);max-height:78%;overflow-y:auto;scrollbar-width:none}
   .glass.sheet-open .veil{opacity:1;pointer-events:auto}
   .glass.sheet-open .sheet{transform:translateY(0)}
   .sheet .grab{width:38px;height:4px;border-radius:4px;background:#E4E1DD;margin:0 auto 15px}
-  .sheet h3{font-size:21px;letter-spacing:-.4px;font-weight:800;margin-bottom:4px}
+  .sheet h3{font-size:21px;letter-spacing:-.4px;font-weight:700;margin-bottom:4px}
   .sheet .sub{font-size:13.5px;color:var(--sub);margin-bottom:13px}
   .opt{border:1.5px solid #E7E4E0;border-radius:18px;padding:13px 14px;display:flex;gap:12px;align-items:center;margin-bottom:9px;cursor:pointer}
   .opt.sel{border-color:var(--ink)}
@@ -167,30 +172,46 @@
   .opt .tx{flex:1}
   .opt .tx b{display:block;font-size:15px;font-weight:700}
   .opt .tx span{font-size:12.5px;color:var(--sub)}
-  .opt .pr{font-size:15px;font-weight:800;text-align:right;white-space:nowrap}
-  .opt .pr .offb{display:inline-block;background:var(--red);color:#fff;font-size:10.5px;font-weight:800;border-radius:100px;padding:2px 7px;margin-left:5px;vertical-align:1px}
-  .opt .pr s{display:block;font-size:12px;color:var(--faint);font-weight:600}
+  .opt .pr{font-size:15px;font-weight:700;text-align:right;white-space:nowrap}
+  .opt .pr .offb{display:inline-block;background:var(--red);color:#fff;font-size:10.5px;font-weight:700;border-radius:100px;padding:2px 7px;margin-left:5px;vertical-align:1px}
+  .opt .pr s{display:block;font-size:12px;color:var(--faint);font-weight:500}
   .sheet .note{display:flex;gap:9px;font-size:12.5px;color:#6B6763;line-height:1.4;background:#F3F1EE;border-radius:14px;padding:11px 12px;margin:4px 0 13px}
-  .ybtn{width:100%;border:0;background:var(--yellow);border-radius:18px;padding:17px;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer}
+  .ybtn{width:100%;border:0;background:var(--yellow);border-radius:18px;padding:17px;font-size:16px;font-weight:500;font-family:inherit;cursor:pointer;color:var(--ink)}
   .ybtn:active{background:var(--yellow-press)}
-  .gbtn{width:100%;border:0;background:#F3F1EE;border-radius:18px;padding:12px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;color:var(--ink)}
+  .gbtn{width:100%;border:0;background:#F3F1EE;border-radius:18px;padding:16px;font-size:15px;font-weight:500;font-family:inherit;cursor:pointer;color:var(--ink)}
+  .toast{position:absolute;left:50%;bottom:110px;transform:translateX(-50%) translateY(14px);background:rgba(33,32,31,.92);color:#fff;font-size:13px;font-weight:500;border-radius:100px;padding:10px 16px;z-index:90;opacity:0;transition:.22s;pointer-events:none;white-space:nowrap}
+  .toast.show{opacity:1;transform:translateX(-50%)}
+
+  .srch{display:flex;align-items:center;gap:9px;background:#F3F1EE;border-radius:100px;padding:11px 14px;margin-bottom:12px}
+  .srch input{border:0;outline:0;background:transparent;font-family:inherit;font-size:15px;flex:1;color:var(--ink)}
+  .srchres{display:flex;align-items:center;gap:11px;padding:9px 2px;border-bottom:1px solid var(--line);cursor:pointer}
+  .srchres:last-child{border-bottom:0}
+  .srchres .im{flex:0 0 46px;height:46px;border-radius:11px;background:var(--tile);display:flex;align-items:center;justify-content:center}
+  .srchres .im svg.prod{width:32px;height:32px}
+  .srchres b{display:block;font-size:13.5px;font-weight:500;line-height:1.25}
+  .srchres span{font-size:12.5px;color:var(--sub)}
+  .srchres .pr{margin-left:auto;font-weight:700;font-size:14px;white-space:nowrap}
+
+  .bub{max-width:84%;border-radius:18px;padding:11px 14px;font-size:13.5px;line-height:1.4;margin-bottom:9px}
+  .bub.user{background:var(--yellow);margin-left:auto;border-bottom-right-radius:6px}
+  .bub.ai{background:#F3F1EE;border-bottom-left-radius:6px}
 
   /* cart */
   .eta{background:#fff;border-radius:22px;padding:15px 16px;margin-bottom:9px}
-  .eta b{font-size:19px;letter-spacing:-.3px}
-  .eta .togo{display:block;font-size:13px;color:var(--sub);margin-top:2px;font-weight:500}
+  .eta b{font-size:19px;letter-spacing:-.3px;font-weight:700}
+  .eta .togo{display:block;font-size:13px;color:var(--sub);margin-top:2px}
   .eta .pbar{height:4px;border-radius:4px;background:#EDEBE8;margin-top:10px;overflow:hidden}
   .eta .pbar i{display:block;height:100%;background:#00CA50;border-radius:4px;transition:.3s}
   .coinrow{background:#fff;border-radius:22px;padding:12px 14px;display:flex;gap:11px;align-items:center;margin-bottom:9px}
   .coinrow .cn{flex:0 0 40px;height:40px;border-radius:50%;background:#FFF3C2;display:flex;align-items:center;justify-content:center}
-  .coinrow b{display:block;font-size:14px}
+  .coinrow b{display:block;font-size:14px;font-weight:500}
   .coinrow span{display:block;font-size:12px;color:var(--sub)}
-  .coinrow .pz{margin-left:auto;background:#F3F1EE;border-radius:100px;padding:9px 13px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+  .coinrow .pz{margin-left:auto;background:#F3F1EE;border-radius:100px;padding:9px 13px;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap}
   .ftg{background:var(--green-bg);border-radius:20px;padding:13px 14px;display:flex;gap:12px;align-items:center;margin-bottom:9px;cursor:pointer}
-  .ftg .tx{flex:1}
-  .ftg .tx b{display:block;font-size:14.5px}
+  .ftg .tx{flex:1;min-width:0}
+  .ftg .tx b{display:block;font-size:14.5px;font-weight:700}
   .ftg .tx span{font-size:12px;color:#57755F;line-height:1.35;display:block;margin-top:2px}
-  .sw2{flex:0 0 46px;height:28px;border-radius:100px;background:#CFE0D4;position:relative;transition:.2s}
+  .sw2{flex:0 0 46px;height:28px;border-radius:100px;background:#CBD9CF;position:relative;transition:.2s}
   .sw2::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 4px rgba(0,0,0,.16)}
   .ftg.on .sw2{background:var(--green)}
   .ftg.on .sw2::after{left:21px}
@@ -199,59 +220,67 @@
   .citem .im svg.prod{width:46px;height:46px}
   .citem .tx{flex:1;min-width:0}
   .citem .nm{font-size:13.5px;line-height:1.3}
-  .citem .pw{font-size:14.5px;font-weight:800;margin-top:3px}
-  .citem .pw s{color:var(--faint);font-weight:600;font-size:12px;margin-left:4px}
+  .citem .pw{font-size:14.5px;font-weight:700;margin-top:3px}
+  .citem .pw s{color:var(--faint);font-weight:500;font-size:12px;margin-left:4px}
   .citem .fresh{margin:6px 0 0}
   .citem .cnt{align-self:center;background:#F3F1EE;border-radius:14px;padding:9px 12px;font-size:14px;font-weight:700;display:flex;gap:14px;align-items:center}
   .citem .cnt span{cursor:pointer;font-size:16px;color:var(--ink)}
-  .srow{background:#fff;border-radius:18px;padding:14px;display:flex;font-size:14px;font-weight:600;margin-bottom:8px;align-items:center}
-  .srow small{font-weight:500;color:var(--sub);margin-left:6px}
+  .srow{background:#fff;border-radius:18px;padding:14px;display:flex;font-size:14px;font-weight:500;margin-bottom:8px;align-items:center;cursor:pointer}
+  .srow small{font-weight:400;color:var(--sub);margin-left:6px}
   .srow .amt{margin-left:auto;font-weight:700}
-  .empty{text-align:center;padding:60px 20px;color:var(--sub);font-size:15px;line-height:1.5}
+  .empty{text-align:center;padding:70px 20px 30px;color:var(--sub);font-size:15px;line-height:1.5}
+  .empty b{display:block;font-size:40px;margin-bottom:12px}
 
   /* checkout */
   .sect{background:#fff;border-radius:22px;padding:6px 14px;margin-bottom:9px}
-  .srowline{display:flex;gap:11px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line)}
+  .srowline{display:flex;gap:11px;align-items:flex-start;padding:13px 0;border-bottom:1px solid var(--line);cursor:pointer}
   .srowline:last-child{border-bottom:0}
   .srowline .ic{flex:0 0 24px;padding-top:1px}
-  .srowline b{display:block;font-size:14.5px;line-height:1.35;font-weight:600}
-  .ylite{background:#FFF6D4;border-radius:16px;padding:12px 13px;display:flex;gap:10px;align-items:center;font-size:13px;font-weight:700;flex:1;cursor:pointer}
+  .srowline b{display:block;font-size:14.5px;line-height:1.35;font-weight:500}
+  .doorrow{display:flex;gap:8px;margin-bottom:9px}
+  .door{flex:1;background:#FDF3C4;border-radius:18px;padding:13px;display:flex;flex-direction:column;gap:10px;cursor:pointer;min-height:86px}
+  .door .cap{display:flex;gap:8px;align-items:flex-start;font-size:13px;font-weight:500;line-height:1.3}
+  .door .cap svg{flex:0 0 18px;margin-top:1px}
+  .door .sw3{width:42px;height:26px;border-radius:100px;background:#E5D793;position:relative;transition:.2s;margin-top:auto}
+  .door .sw3::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 4px rgba(0,0,0,.15)}
+  .door.on .sw3{background:#F6C500}
+  .door.on .sw3::after{left:19px}
   .paycards{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px;scrollbar-width:none}
   .paycards::-webkit-scrollbar{display:none}
-  .pc{flex:0 0 110px;border:1.5px solid var(--line);border-radius:16px;padding:12px;cursor:pointer;background:#fff}
+  .pc{flex:0 0 112px;border:1.5px solid var(--line);border-radius:16px;padding:12px;cursor:pointer;background:#fff}
   .pc.sel{border-color:var(--ink)}
-  .pc b{display:block;font-size:13.5px;margin-top:12px}
+  .pc b{display:block;font-size:13.5px;margin-top:12px;font-weight:700}
   .pc span{font-size:11px;color:var(--sub)}
   .tips{display:flex;gap:7px;overflow-x:auto;padding:4px 0 12px;scrollbar-width:none}
   .tips::-webkit-scrollbar{display:none}
-  .tip{flex:0 0 auto;border:1.5px solid var(--line);border-radius:16px;padding:10px 14px;text-align:center;cursor:pointer;background:#fff}
+  .tip{flex:0 0 auto;border:1.5px solid var(--line);border-radius:16px;padding:10px 14px;text-align:center;cursor:pointer;background:#fff;min-width:66px}
   .tip.sel{border-color:var(--ink)}
-  .tip b{display:block;font-size:14px}
+  .tip b{display:block;font-size:14px;font-weight:700}
   .tip span{font-size:11.5px;color:var(--sub)}
-  .h3x{font-size:18px;font-weight:800;letter-spacing:-.3px;margin:14px 4px 8px}
+  .h3x{font-size:18px;font-weight:700;letter-spacing:-.3px;margin:14px 4px 8px}
 
   /* order */
   .prog{display:flex;align-items:center;justify-content:center;margin:22px 0 18px}
   .prog .st{width:50px;height:50px;border-radius:50%;background:#EAE8E5;display:flex;align-items:center;justify-content:center}
-  .prog .st.done,.prog .st.act{background:var(--yellow)}
+  .prog .st.done,.prog .st.act{background:var(--yellow2)}
   .prog .st.act{animation:pulse 1.7s infinite}
   @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,222,64,.65)}55%{box-shadow:0 0 0 11px rgba(255,222,64,0)}}
   .prog .ln{width:24px;height:3px;background:#EAE8E5}
-  .prog .ln.done{background:var(--yellow)}
+  .prog .ln.done{background:var(--yellow2)}
   .ocen{text-align:center;margin-bottom:16px}
-  .ocen h2{font-size:25px;letter-spacing:-.5px;font-weight:800}
+  .ocen h2{font-size:25px;letter-spacing:-.5px;font-weight:700}
   .ocen p{font-size:14px;color:var(--sub);margin-top:3px}
   .scan{background:#fff;border-radius:22px;padding:15px 16px;margin-bottom:9px}
-  .scan .cap{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:800;margin-bottom:6px}
-  .scan .cap .ok{margin-left:auto;font-size:12.5px;color:var(--green);font-weight:700}
+  .scan .cap{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;margin-bottom:6px}
+  .scan .cap .ok{margin-left:auto;font-size:12.5px;color:var(--green);font-weight:500}
   .sitem{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line);font-size:13.5px}
   .sitem:first-of-type{border-top:0}
   .sitem .em{flex:0 0 34px;height:34px;border-radius:9px;background:var(--tile);display:flex;align-items:center;justify-content:center}
   .sitem .em svg.prod{width:26px;height:26px}
   .sitem .tx{flex:1}
-  .sitem .tx b{font-weight:700}
+  .sitem .tx b{font-weight:500}
   .sitem .tx span{display:block;font-size:11.5px;color:var(--sub)}
-  .sitem .ck{color:var(--green);font-weight:800;font-size:16px;opacity:0;transform:scale(.4);transition:.35s cubic-bezier(.2,1.6,.4,1)}
+  .sitem .ck{color:var(--green);font-weight:700;font-size:16px;opacity:0;transform:scale(.4);transition:.35s cubic-bezier(.2,1.6,.4,1)}
   .sitem .ck.show{opacity:1;transform:scale(1)}
   .scan .footn{font-size:12px;color:#6B6763;line-height:1.45;background:#F3F1EE;border-radius:13px;padding:10px 12px;margin-top:9px}
   .btnrow{display:flex;gap:8px;margin-top:2px}
@@ -280,33 +309,28 @@
     <div class="step" data-go="s5"><span class="n">5</span><div><b>Заказ</b><span>сборщик сканирует партии — даты в чеке</span></div></div>
   </div>
   <label class="hl-toggle" onclick="document.body.classList.toggle('hl')"><span class="sw"></span>Подсветить новые элементы</label>
-  <p class="foot">Кейс для стажировки «Go в менеджмент» · Матвей Селин<br>Кликабельно всё: товары, степперы, партии, чаевые, оплата.</p>
+  <p class="foot">Кейс для стажировки «Go в менеджмент» · Матвей Селин<br>Кликабельно всё: товары, степперы, партии, поиск, Лавка AI, чаевые, оплата.</p>
 </aside>
 
 <div class="phone"><div class="glass" id="glass">
   <div class="sb">
     <span class="t">12:20</span>
     <svg width="64" height="13" viewBox="0 0 64 13" fill="none">
-      <rect x="0" y="7" width="3" height="5" rx="1" fill="#1C1B19"/><rect x="5" y="5" width="3" height="7" rx="1" fill="#1C1B19"/><rect x="10" y="3" width="3" height="9" rx="1" fill="#1C1B19"/><rect x="15" y="1" width="3" height="11" rx="1" fill="#1C1B19"/>
-      <path d="M28 5.5c2.6-2.4 6.4-2.4 9 0l-1.6 1.7c-1.7-1.5-4.1-1.5-5.8 0L28 5.5zm3.2 3.3c.8-.7 2-.7 2.7 0L32.5 11l-1.3-2.2z" fill="#1C1B19"/>
-      <rect x="44" y="2" width="17" height="9" rx="2.6" stroke="#1C1B19" stroke-opacity=".4"/><rect x="45.6" y="3.6" width="11" height="5.8" rx="1.4" fill="#1C1B19"/><path d="M62.5 5v3a2 2 0 000-3z" fill="#1C1B19" fill-opacity=".5"/>
+      <rect x="0" y="7" width="3" height="5" rx="1" fill="#21201F"/><rect x="5" y="5" width="3" height="7" rx="1" fill="#21201F"/><rect x="10" y="3" width="3" height="9" rx="1" fill="#21201F"/><rect x="15" y="1" width="3" height="11" rx="1" fill="#21201F"/>
+      <path d="M28 5.5c2.6-2.4 6.4-2.4 9 0l-1.6 1.7c-1.7-1.5-4.1-1.5-5.8 0L28 5.5zm3.2 3.3c.8-.7 2-.7 2.7 0L32.5 11l-1.3-2.2z" fill="#21201F"/>
+      <rect x="44" y="2" width="17" height="9" rx="2.6" stroke="#21201F" stroke-opacity=".4"/><rect x="45.6" y="3.6" width="11" height="5.8" rx="1.4" fill="#21201F"/><path d="M62.5 5v3a2 2 0 000-3z" fill="#21201F" fill-opacity=".5"/>
     </svg>
   </div>
 
   <section class="screen on" id="s1">
     <div class="scroll" style="padding-bottom:150px">
       <div class="hdr">
-        <div class="rnd press"><svg width="18" height="16" viewBox="0 0 18 16" fill="none"><path d="M8 1L2 8l6 7M2.5 8H17" stroke="#1C1B19" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <div class="rnd press" onclick="toast('Это стартовый экран прототипа')"><svg width="18" height="16" viewBox="0 0 18 16" fill="none"><path d="M8 1L2 8l6 7M2.5 8H17" stroke="#21201F" stroke-width="2" stroke-linecap="round"/></svg></div>
         <h2>Молоко и яйца</h2>
-        <div class="rnd press"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="7.5" cy="7.5" r="6" stroke="#1C1B19" stroke-width="2"/><path d="M12.5 12.5L17 17" stroke="#1C1B19" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <div class="rnd press" onclick="openSearch()"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="7.5" cy="7.5" r="6" stroke="#21201F" stroke-width="2"/><path d="M12.5 12.5L17 17" stroke="#21201F" stroke-width="2" stroke-linecap="round"/></svg></div>
       </div>
-      <div class="seg"><div><b>лавка у дома</b><span>5 000 товаров</span></div><div class="on"><b>большая лавка</b><span>10 000 товаров</span></div></div>
-      <div class="chips">
-        <div class="chip sel nw">🌿 Самое свежее</div>
-        <div class="chip">↺ Уже брали</div>
-        <div class="chip">％ Скидки</div>
-        <div class="chip">✦ Новинки</div>
-      </div>
+      <div class="seg" id="seg" onclick="segFlip(event)"><div><b>лавка у дома</b><span>5 000 товаров</span></div><div class="on"><b>большая лавка</b><span>10 000 товаров</span></div></div>
+      <div class="chips" id="chips"></div>
       <div class="grid" id="grid"></div>
     </div>
     <div class="strip"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><path d="M1 11h2.2a2.4 2.4 0 004.6 0h3.4a2.4 2.4 0 004.6 0H17V7l-2.5-4H11v8M11 4H1v7" stroke="#1E7A46" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Доставка 15–25 мин<span class="dash" id="stripFree">0 ₽ от 450 ₽</span></div>
@@ -318,8 +342,9 @@
       <div class="crumbs">
         <span class="crumb" id="crumb1">Молоко ›</span><span class="crumb">Пастеризованное ›</span>
         <div class="pico">
-          <div class="rnd press"><svg width="16" height="17" viewBox="0 0 16 17" fill="none"><path d="M8 1v10M8 1L4 5m4-4l4 4M2 9v5a2 2 0 002 2h8a2 2 0 002-2V9" stroke="#1C1B19" stroke-width="1.8" stroke-linecap="round"/></svg></div>
-          <div class="rnd press" onclick="goto('s1')"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1l12 12M13 1L1 13" stroke="#1C1B19" stroke-width="2" stroke-linecap="round"/></svg></div>
+          <div class="rnd press" onclick="toast('Ссылка на товар скопирована')"><svg width="16" height="17" viewBox="0 0 16 17" fill="none"><path d="M8 1v10M8 1L4 5m4-4l4 4M2 9v5a2 2 0 002 2h8a2 2 0 002-2V9" stroke="#21201F" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+          <div class="rnd press" id="favBtn" onclick="favFlip()"><svg width="18" height="16" viewBox="0 0 18 16"><path id="favPath" d="M9 15C4.5 12 1.5 8.8 1.5 5.6A3.9 3.9 0 019 3a3.9 3.9 0 017.5 2.6c0 3.2-3 6.4-7.5 9.4z" fill="none" stroke="#21201F" stroke-width="1.8"/></svg></div>
+          <div class="rnd press" onclick="goto('s1')"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1l12 12M13 1L1 13" stroke="#21201F" stroke-width="2" stroke-linecap="round"/></svg></div>
         </div>
       </div>
       <div class="hero" id="hero"></div>
@@ -328,16 +353,19 @@
       <div class="punit" id="punit"></div>
 
       <div class="fcard nw" id="fcard" onclick="openSheet(curId)">
-        <div class="ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 12c4-1 7-4 8.5-8.5C13.5 8 12 14 4 12z" fill="#1FA95C"/></svg></div>
-        <div class="tx"><em id="fLbl">Свежесть партии</em><b id="fBig"></b><span id="fSub"></span><div class="bar"><i id="fBar"></i></div></div>
+        <div class="ico"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 12c4-1 7-4 8.5-8.5C13.5 8 12 14 4 12z" fill="#00B45A"/></svg></div>
+        <div class="tx"><em>Свежесть партии</em><b id="fBig"></b><span id="fSub"></span><div class="bar"><i id="fBar"></i></div></div>
         <div class="chev">›</div>
       </div>
 
-      <div class="row press"><span class="alisa"></span>Спросить Лавку AI<span class="chev">›</span></div>
+      <div class="row press" onclick="openAI()"><span class="alisa"></span>Спросить Лавку AI<span class="chev">›</span></div>
       <div class="revbox">Из отзывов покупателей: <b id="prev"></b></div>
       <div class="sechead">Подробнее о товаре</div>
-      <div class="tabs"><div class="tabai"><span class="alisa" style="width:18px;height:18px"></span>AI-состав</div><div class="tabmut">Полный состав</div></div>
-      <div class="comp"><b>Краткий состав</b><p id="pcomp"></p><i>Лавка AI сократила состав и выделила главное. Все ингредиенты — в полном составе.</i></div>
+      <div class="tabs">
+        <div class="tabai act" id="tabAI" onclick="compMode(true)"><span class="alisa" style="width:18px;height:18px;flex-basis:18px"></span>AI-состав</div>
+        <div class="tabmut" id="tabFull" onclick="compMode(false)">Полный состав</div>
+      </div>
+      <div class="comp"><b id="compCap">Краткий состав</b><p id="pcomp"></p><i id="compNote">Лавка AI сократила состав и выделила главное. Все ингредиенты — в полном составе.</i></div>
       <div class="spec"><b>Срок годности, условия хранения</b><p id="pshelf"></p></div>
       <div class="spec"><b>Производитель, страна</b><p id="pmaker"></p></div>
       <div style="height:20px"></div>
@@ -348,9 +376,9 @@
   <section class="screen" id="s3">
     <div class="scroll" style="padding-bottom:180px">
       <div class="hdr">
-        <div class="rnd press" onclick="goto('s2')"><svg width="18" height="16" viewBox="0 0 18 16" fill="none"><path d="M8 1L2 8l6 7M2.5 8H17" stroke="#1C1B19" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <div class="rnd press" onclick="goto('s1')"><svg width="18" height="16" viewBox="0 0 18 16" fill="none"><path d="M8 1L2 8l6 7M2.5 8H17" stroke="#21201F" stroke-width="2" stroke-linecap="round"/></svg></div>
         <h2 style="text-align:center;flex:1">Корзина</h2>
-        <div class="rnd press"><svg width="16" height="18" viewBox="0 0 16 18" fill="none"><path d="M1 4h14M6 4V2.5A1.5 1.5 0 017.5 1h1A1.5 1.5 0 0110 2.5V4m3 0l-.8 11.2A2 2 0 0110.2 17H5.8a2 2 0 01-2-1.8L3 4" stroke="#1C1B19" stroke-width="1.7" stroke-linecap="round"/></svg></div>
+        <div class="rnd press" onclick="clearCart()"><svg width="16" height="18" viewBox="0 0 16 18" fill="none"><path d="M1 4h14M6 4V2.5A1.5 1.5 0 017.5 1h1A1.5 1.5 0 0110 2.5V4m3 0l-.8 11.2A2 2 0 0110.2 17H5.8a2 2 0 01-2-1.8L3 4" stroke="#21201F" stroke-width="1.7" stroke-linecap="round"/></svg></div>
       </div>
       <div id="cartBody"></div>
     </div>
@@ -361,48 +389,54 @@
   <section class="screen" id="s4">
     <div class="scroll">
       <div class="hdr">
-        <div class="rnd press" onclick="goto('s3')"><svg width="18" height="16" viewBox="0 0 18 16" fill="none"><path d="M8 1L2 8l6 7M2.5 8H17" stroke="#1C1B19" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <div class="rnd press" onclick="goto('s3')"><svg width="18" height="16" viewBox="0 0 18 16" fill="none"><path d="M8 1L2 8l6 7M2.5 8H17" stroke="#21201F" stroke-width="2" stroke-linecap="round"/></svg></div>
         <h2>Адрес и оплата</h2>
       </div>
       <div class="sect">
-        <div class="srowline"><span class="ic"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="6" stroke="#F5523A" stroke-width="3"/></svg></span><div style="flex:1"><b>Ленинградский пр-т, 24А, кв 51,<br>подъезд 2, домофон 51, этаж 7</b></div><span style="color:#C9C6C2;font-weight:700">›</span></div>
-        <div class="srowline"><span class="ic"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 4h14v9H8l-4 3.5V4z" stroke="#1C1B19" stroke-width="1.7" stroke-linejoin="round"/></svg></span><div style="flex:1"><b style="font-weight:500;color:#5F5B57">Комментарий для курьера</b></div></div>
-        <div style="display:flex;gap:8px;padding:12px 0">
-          <label class="ylite press"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="1.5" width="12" height="15" rx="1.5" stroke="#1C1B19" stroke-width="1.6"/><circle cx="12" cy="9" r="1.2" fill="#1C1B19"/></svg>Оставить у двери<span class="sw2 on" style="flex:0 0 40px;height:24px;margin-left:auto;background:#E8C900"></span></label>
-          <div class="ylite press"><svg width="17" height="17" viewBox="0 0 17 17" fill="none"><path d="M4.8 1.5c.6 0 1.2.4 1.4 1l.8 2.2c.2.6 0 1.3-.5 1.7l-1 .8a11 11 0 004.3 4.3l.8-1c.4-.5 1.1-.7 1.7-.5l2.2.8c.6.2 1 .8 1 1.4v1.9c0 .9-.7 1.6-1.6 1.5C7.6 15 2 9.4 1.4 3.1c-.1-.9.6-1.6 1.5-1.6h1.9z" stroke="#1C1B19" stroke-width="1.5"/></svg>Сообщить, если чего-то нет</div>
+        <div class="srowline" onclick="toast('Выбор адреса — вне сценария прототипа')"><span class="ic"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="6" stroke="#FC5230" stroke-width="3.2"/></svg></span><div style="flex:1"><b>Ленинградский пр-т, 24А, кв 51,<br>подъезд 2, домофон 51, этаж 7</b></div><span style="color:#C9C6C2;font-weight:700">›</span></div>
+        <div class="srowline" onclick="toast('Комментарий курьеру — вне сценария')"><span class="ic"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 4h14v9H8l-4 3.5V4z" stroke="#21201F" stroke-width="1.7" stroke-linejoin="round"/></svg></span><div style="flex:1"><b style="font-weight:400;color:#8B8783">Комментарий для курьера</b></div></div>
+      </div>
+      <div class="doorrow">
+        <div class="door on" id="doorTg" onclick="doorFlip()">
+          <div class="cap"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="1.5" width="12" height="15" rx="1.5" stroke="#21201F" stroke-width="1.6"/><circle cx="12" cy="9" r="1.2" fill="#21201F"/></svg>Оставить у двери</div>
+          <div class="sw3"></div>
+        </div>
+        <div class="door" onclick="toast('Позвоним, если чего-то не окажется')">
+          <div class="cap"><svg width="17" height="17" viewBox="0 0 17 17" fill="none"><path d="M4.8 1.5c.6 0 1.2.4 1.4 1l.8 2.2c.2.6 0 1.3-.5 1.7l-1 .8a11 11 0 004.3 4.3l.8-1c.4-.5 1.1-.7 1.7-.5l2.2.8c.6.2 1 .8 1 1.4v1.9c0 .9-.7 1.6-1.6 1.5C7.6 15 2 9.4 1.4 3.1c-.1-.9.6-1.6 1.5-1.6h1.9z" stroke="#21201F" stroke-width="1.5"/></svg>Сообщить, если чего-то нет</div>
+          <div style="font-size:11.5px;color:#8A7F4B;margin-top:auto">Позвоним или напишем</div>
         </div>
       </div>
       <div class="h3x">Способы оплаты</div>
       <div class="paycards">
-        <div class="pc sel press" onclick="selPay(this)"><svg width="26" height="18" viewBox="0 0 26 18" fill="none"><rect x="1" y="1" width="24" height="16" rx="3" stroke="#1C1B19" stroke-width="1.6"/><path d="M1 6h24" stroke="#1C1B19" stroke-width="1.6"/></svg><b>· 1976</b><span>МИР</span></div>
-        <div class="pc press" onclick="selPay(this)"><svg width="40" height="18" viewBox="0 0 40 18"><text x="0" y="14" font-size="13" font-weight="800" font-style="italic" fill="#1C1B19">Я Пэй</text></svg><b>0 ₽</b><span>МИР</span></div>
-        <div class="pc press" onclick="selPay(this)"><svg width="20" height="20" viewBox="0 0 20 20"><path d="M3 3l7 4v6l-7 4V3z" fill="#33B8FF"/><path d="M17 3l-7 4v6l7 4V3z" fill="#7B61FF" opacity=".8"/></svg><b>Выбрать банк</b><span>СБП</span></div>
+        <div class="pc sel press" onclick="selPay(this)"><svg width="26" height="18" viewBox="0 0 26 18" fill="none"><rect x="1" y="1" width="24" height="16" rx="3" stroke="#21201F" stroke-width="1.6"/><path d="M1 6h24" stroke="#21201F" stroke-width="1.6"/></svg><b>· 1976</b><span>МИР</span></div>
+        <div class="pc press" onclick="selPay(this)"><svg width="42" height="18" viewBox="0 0 42 18"><text x="0" y="14" font-size="13" font-weight="700" font-style="italic" fill="#21201F" font-family="inherit">Я Пэй</text></svg><b>0 ₽</b><span>МИР</span></div>
+        <div class="pc press" onclick="selPay(this)"><svg width="20" height="20" viewBox="0 0 20 20"><path d="M3 3l7 4v6l-7 4V3z" fill="#40BEFA"/><path d="M17 3l-7 4v6l7 4V3z" fill="#7B61FF" opacity=".8"/></svg><b>Выбрать банк</b><span>СБП</span></div>
       </div>
       <div class="h3x">Чаевые курьеру</div>
       <div style="font-size:12.5px;color:var(--sub);margin:-4px 4px 6px">Курьер получит всю сумму ваших чаевых</div>
       <div class="tips" id="tips"></div>
-      <div class="sect" style="padding:0 14px"><div class="srowline"><span class="ic" style="font-weight:800">％</span><div style="flex:1"><b>Промокод</b></div><span style="color:#C9C6C2;font-weight:700">›</span></div></div>
+      <div class="sect" style="padding:0 14px"><div class="srowline" onclick="toast('У вас 5 промокодов')"><span class="ic" style="font-weight:700">％</span><div style="flex:1"><b>Промокод</b></div><span style="color:#C9C6C2;font-weight:700">›</span></div></div>
       <div style="height:80px"></div>
     </div>
-    <div class="bbar" id="payBar" onclick="pay()"></div>
+    <div class="bbar" id="payBar" onclick="goto('s5')"></div>
   </section>
 
   <section class="screen" id="s5">
     <div class="scroll">
       <div class="prog">
-        <div class="st done"><svg width="20" height="16" viewBox="0 0 20 16" fill="none"><path d="M2 8.5L7.5 14 18 2" stroke="#1C1B19" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="ln done"></div>
-        <div class="st act"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 7l8-4 8 4v8l-8 4-8-4V7z" stroke="#1C1B19" stroke-width="1.8" stroke-linejoin="round"/><path d="M3 7l8 4 8-4M11 11v8" stroke="#1C1B19" stroke-width="1.8" stroke-linejoin="round"/></svg></div><div class="ln"></div>
+        <div class="st done"><svg width="20" height="16" viewBox="0 0 20 16" fill="none"><path d="M2 8.5L7.5 14 18 2" stroke="#21201F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="ln done"></div>
+        <div class="st act"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 7l8-4 8 4v8l-8 4-8-4V7z" stroke="#21201F" stroke-width="1.8" stroke-linejoin="round"/><path d="M3 7l8 4 8-4M11 11v8" stroke="#21201F" stroke-width="1.8" stroke-linejoin="round"/></svg></div><div class="ln"></div>
         <div class="st"><svg width="24" height="18" viewBox="0 0 24 18" fill="none"><circle cx="5" cy="13" r="3.4" stroke="#A5A29D" stroke-width="1.8"/><circle cx="19" cy="13" r="3.4" stroke="#A5A29D" stroke-width="1.8"/><path d="M5 13l4-8h5l5 8M9 5h4" stroke="#A5A29D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="ln"></div>
         <div class="st"><svg width="16" height="19" viewBox="0 0 16 19" fill="none"><path d="M2 18V2m0 0h12l-3 4 3 4H2" stroke="#A5A29D" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       </div>
       <div class="ocen"><h2>Собираем заказ</h2><p>Приедет через 15–25 минут</p></div>
       <div class="scan nw">
-        <div class="cap"><svg width="17" height="17" viewBox="0 0 20 20" fill="none"><path d="M4 12c4-1 7-4 8.5-8.5C13.5 8 12 14 4 12z" fill="#1FA95C"/></svg>Свежесть партий<span class="ok" id="scanCap">сканируем…</span></div>
+        <div class="cap"><svg width="17" height="17" viewBox="0 0 20 20" fill="none"><path d="M4 12c4-1 7-4 8.5-8.5C13.5 8 12 14 4 12z" fill="#00B45A"/></svg>Свежесть партий<span class="ok" id="scanCap">сканируем…</span></div>
         <div id="scanList"></div>
         <div class="footn">Даты всех партий придут в электронном чеке. Привезли не то, что обещали, — мгновенный возврат без переписки с поддержкой.</div>
       </div>
       <div class="btnrow">
-        <button class="gbtn press" style="flex:1">Чат поддержки</button>
+        <button class="gbtn press" style="flex:1" onclick="toast('Чат поддержки — вне сценария прототипа')">Чат поддержки</button>
         <button class="ybtn press" style="flex:1;width:auto" onclick="goto('s1')">В каталог</button>
       </div>
       <div style="height:20px"></div>
@@ -411,42 +445,44 @@
 
   <div class="veil" onclick="closeSheet()"></div>
   <div class="sheet" id="sheet"></div>
+  <div class="toast" id="toast"></div>
 </div></div>
 
 <script>
 /* ---------- продуктовые SVG ---------- */
 const ART = {
-  milk: '<svg class="prod" viewBox="0 0 96 96"><path d="M34 18h28l6 14v46a4 4 0 01-4 4H32a4 4 0 01-4-4V32l6-14z" fill="#fff" stroke="#E3E0DB" stroke-width="2"/><path d="M34 18h28l6 14H28l6-14z" fill="#F4F1EC" stroke="#E3E0DB" stroke-width="2"/><rect x="29" y="44" width="38" height="22" fill="#2E8B4A"/><text x="48" y="54" text-anchor="middle" font-size="7.5" font-weight="700" fill="#fff" font-family="Arial">ДОМИК</text><text x="48" y="62" text-anchor="middle" font-size="6" fill="#DFF3E3" font-family="Arial">в деревне 3,2%</text><ellipse cx="48" cy="73" rx="12" ry="4" fill="#EAF6FE"/></svg>',
-  tvorog: '<svg class="prod" viewBox="0 0 96 96"><path d="M24 40h48l-4 34a5 5 0 01-5 4H33a5 5 0 01-5-4l-4-34z" fill="#fff" stroke="#E3E0DB" stroke-width="2"/><ellipse cx="48" cy="40" rx="24" ry="7" fill="#D23B33"/><ellipse cx="48" cy="38" rx="24" ry="7" fill="#E8473E"/><text x="48" y="62" text-anchor="middle" font-size="8" font-weight="700" fill="#D23B33" font-family="Arial">ИЗ ЛАВКИ</text><text x="48" y="70" text-anchor="middle" font-size="6" fill="#9C9A96" font-family="Arial">творог 5%</text></svg>',
-  syrniki: '<svg class="prod" viewBox="0 0 96 96"><rect x="18" y="26" width="60" height="46" rx="7" fill="#E8473E"/><rect x="26" y="36" width="44" height="24" rx="4" fill="#fff"/><ellipse cx="41" cy="48" rx="9" ry="6" fill="#F2B34C"/><ellipse cx="55" cy="48" rx="9" ry="6" fill="#E8A23B"/><text x="48" y="68" text-anchor="middle" font-size="6.5" font-weight="700" fill="#fff" font-family="Arial">СЫРНИКИ · ИЗ ЛАВКИ</text></svg>',
-  eggs: '<svg class="prod" viewBox="0 0 96 96"><path d="M20 44h56v22a5 5 0 01-5 5H25a5 5 0 01-5-5V44z" fill="#D9B98C"/><path d="M20 44h56l-5-12H25l-5 12z" fill="#E7CCA3"/><ellipse cx="34" cy="44" rx="7" ry="9" fill="#FDF6EA"/><ellipse cx="48" cy="44" rx="7" ry="9" fill="#FBF1E0"/><ellipse cx="62" cy="44" rx="7" ry="9" fill="#FDF6EA"/><text x="48" y="62" text-anchor="middle" font-size="7" font-weight="700" fill="#8A6A3E" font-family="Arial">ЯЙЦА С1 · 10</text></svg>',
-  kefir: '<svg class="prod" viewBox="0 0 96 96"><path d="M38 30h20v6c6 3 8 8 8 14v24a6 6 0 01-6 6H36a6 6 0 01-6-6V50c0-6 2-11 8-14v-6z" fill="#fff" stroke="#E3E0DB" stroke-width="2"/><rect x="36" y="22" width="24" height="9" rx="3" fill="#6FBF4B"/><rect x="30" y="52" width="36" height="18" fill="#6FBF4B" opacity=".18"/><text x="48" y="62" text-anchor="middle" font-size="7.5" font-weight="700" fill="#4E9A31" font-family="Arial">КЕФИР 1%</text></svg>',
-  smetana: '<svg class="prod" viewBox="0 0 96 96"><path d="M26 42h44l-3 30a5 5 0 01-5 4H34a5 5 0 01-5-4l-3-30z" fill="#fff" stroke="#E3E0DB" stroke-width="2"/><ellipse cx="48" cy="42" rx="22" ry="6.5" fill="#2E8B4A"/><ellipse cx="48" cy="40" rx="22" ry="6.5" fill="#3BA35B"/><text x="48" y="62" text-anchor="middle" font-size="7" font-weight="700" fill="#2E8B4A" font-family="Arial">СМЕТАНА 15%</text></svg>'
+  milk: '<svg class="prod" viewBox="0 0 96 96"><path d="M34 18h28l6 14v46a4 4 0 01-4 4H32a4 4 0 01-4-4V32l6-14z" fill="#fff" stroke="#E3E0DB" stroke-width="2"/><path d="M34 18h28l6 14H28l6-14z" fill="#F4F1EC" stroke="#E3E0DB" stroke-width="2"/><rect x="30" y="44" width="36" height="21" rx="2" fill="#2E8B4A"/><text x="48" y="53.5" text-anchor="middle" font-size="6.2" font-weight="700" fill="#fff" font-family="Arial">ДОМИК</text><text x="48" y="61" text-anchor="middle" font-size="4.8" fill="#DFF3E3" font-family="Arial">в деревне · 3,2%</text><ellipse cx="48" cy="73" rx="11" ry="3.6" fill="#EAF6FE"/></svg>',
+  tvorog: '<svg class="prod" viewBox="0 0 96 96"><path d="M24 40h48l-4 34a5 5 0 01-5 4H33a5 5 0 01-5-4l-4-34z" fill="#fff" stroke="#E3E0DB" stroke-width="2"/><ellipse cx="48" cy="40" rx="24" ry="7" fill="#D23B33"/><ellipse cx="48" cy="38" rx="24" ry="7" fill="#E8473E"/><text x="48" y="60" text-anchor="middle" font-size="6.8" font-weight="700" fill="#D23B33" font-family="Arial">ИЗ ЛАВКИ</text><text x="48" y="68" text-anchor="middle" font-size="5.2" fill="#9C9A96" font-family="Arial">творог 5%</text></svg>',
+  syrniki: '<svg class="prod" viewBox="0 0 96 96"><rect x="18" y="28" width="60" height="42" rx="7" fill="#E8473E"/><rect x="25" y="36" width="46" height="21" rx="4" fill="#fff"/><ellipse cx="41" cy="46.5" rx="8.5" ry="5.5" fill="#F2B34C"/><ellipse cx="55" cy="46.5" rx="8.5" ry="5.5" fill="#E8A23B"/><text x="48" y="65" text-anchor="middle" font-size="5.8" font-weight="700" fill="#fff" font-family="Arial">СЫРНИКИ</text></svg>',
+  eggs: '<svg class="prod" viewBox="0 0 96 96"><path d="M20 44h56v22a5 5 0 01-5 5H25a5 5 0 01-5-5V44z" fill="#D9B98C"/><path d="M20 44h56l-5-12H25l-5 12z" fill="#E7CCA3"/><ellipse cx="34" cy="44" rx="7" ry="9" fill="#FDF6EA"/><ellipse cx="48" cy="44" rx="7" ry="9" fill="#FBF1E0"/><ellipse cx="62" cy="44" rx="7" ry="9" fill="#FDF6EA"/><text x="48" y="61.5" text-anchor="middle" font-size="6" font-weight="700" fill="#8A6A3E" font-family="Arial">ЯЙЦА С1</text></svg>',
+  kefir: '<svg class="prod" viewBox="0 0 96 96"><path d="M38 30h20v6c6 3 8 8 8 14v24a6 6 0 01-6 6H36a6 6 0 01-6-6V50c0-6 2-11 8-14v-6z" fill="#fff" stroke="#E3E0DB" stroke-width="2"/><rect x="36" y="22" width="24" height="9" rx="3" fill="#6FBF4B"/><rect x="30" y="52" width="36" height="17" fill="#6FBF4B" opacity=".16"/><text x="48" y="62" text-anchor="middle" font-size="6.4" font-weight="700" fill="#4E9A31" font-family="Arial">КЕФИР 1%</text></svg>',
+  smetana: '<svg class="prod" viewBox="0 0 96 96"><path d="M26 42h44l-3 30a5 5 0 01-5 4H34a5 5 0 01-5-4l-3-30z" fill="#fff" stroke="#E3E0DB" stroke-width="2"/><ellipse cx="48" cy="42" rx="22" ry="6.5" fill="#2E8B4A"/><ellipse cx="48" cy="40" rx="22" ry="6.5" fill="#3BA35B"/><text x="48" y="60" text-anchor="middle" font-size="6" font-weight="700" fill="#2E8B4A" font-family="Arial">СМЕТАНА</text><text x="48" y="67.5" text-anchor="middle" font-size="4.8" fill="#9C9A96" font-family="Arial">15%</text></svg>'
 };
 
 /* ---------- данные ---------- */
 const P = {
-  milk:    {name:'Молоко «Домик в деревне» пастеризованное 3,2%', short:'Молоко «Домик в деревне»', unit:'930 мл', base:119, qty:1, sel:0, cat:'Молоко ›',
+  milk:    {name:'Молоко «Домик в деревне» 3,2%', short:'Молоко «Домик в деревне»', unit:'930 мл', base:119, qty:1, sel:0, cat:'Молоко ›', was:1,
             fresh:[{until:'23 июля',days:12,mult:1},{until:'13 июля',days:2,mult:.8}],
-            comp:'Молоко цельное, молоко обезжиренное', shelf:'14 сут, от +2 °C до +6 °C', maker:'АО «Данон Россия», Россия', rev:'«Вкус как из детства, беру постоянно»'},
-  tvorog:  {name:'Творог 5% «Из Лавки»', short:'Творог «Из Лавки»', unit:'250 г', base:149, qty:1, sel:0, cat:'Творог ›',
+            comp:'Молоко цельное, молоко обезжиренное', full:'Молоко цельное, молоко обезжиренное. Массовая доля жира 3,2%. Может содержать следы лактозы.', shelf:'14 сут, от +2 °C до +6 °C', maker:'АО «Данон Россия», Россия', rev:'«Вкус как из детства, беру постоянно»'},
+  tvorog:  {name:'Творог 5% «Из Лавки»', short:'Творог «Из Лавки»', unit:'250 г', base:149, qty:1, sel:0, cat:'Творог ›', was:1,
             fresh:[{until:'20 июля',days:9,mult:1},{until:'13 июля',days:2,mult:.8}],
-            comp:'Молоко цельное, закваска', shelf:'12 сут, от +2 °C до +6 °C', maker:'ООО «Лавка Фабрика», Россия', rev:'«Нежный, не кислит — идеален на сырники»'},
-  syrniki: {name:'Сырники «Из Лавки»', short:'Сырники «Из Лавки»', unit:'300 г', base:269, qty:1, sel:1, cat:'Готовая еда ›',
+            comp:'Молоко цельное, закваска', full:'Молоко цельное нормализованное, закваска молочнокислых культур. Массовая доля жира 5%.', shelf:'12 сут, от +2 °C до +6 °C', maker:'ООО «Лавка Фабрика», Россия', rev:'«Нежный, не кислит — идеален на сырники»'},
+  syrniki: {name:'Сырники «Из Лавки»', short:'Сырники «Из Лавки»', unit:'300 г', base:269, qty:1, sel:1, cat:'Готовая еда ›', was:1, nov:1,
             fresh:[{until:'19 июля',days:8,mult:1},{until:'12 июля',days:1,mult:.8}],
-            comp:'Творог, мука, яйцо, сахар, изюм', shelf:'8 сут, от +2 °C до +6 °C', maker:'ООО «Лавка Фабрика», Россия', rev:'«Разогрел — как у бабушки»'},
+            comp:'Творог, мука, яйцо, сахар, изюм', full:'Творог 9%, мука пшеничная в/с, яйцо куриное, сахар, изюм, масло сливочное, соль.', shelf:'8 сут, от +2 °C до +6 °C', maker:'ООО «Лавка Фабрика», Россия', rev:'«Разогрел — как у бабушки»'},
   eggs:    {name:'Яйца куриные С1', short:'Яйца куриные С1', unit:'10 шт', base:129, qty:0, sel:0, cat:'Яйца ›',
             fresh:[{until:'29 июля',days:18,mult:1}],
-            comp:'Яйцо куриное столовое', shelf:'25 сут, от 0 °C до +20 °C', maker:'ПАО «Птицефабрика Роскар», Россия', rev:'«Крупные, ни одного битого»'},
-  kefir:   {name:'Кефир 1% «Домик в деревне»', short:'Кефир «Домик в деревне»', unit:'900 мл', base:99, qty:0, sel:0, cat:'Кефир ›',
+            comp:'Яйцо куриное столовое', full:'Яйцо куриное столовое, категория С1. Масса одного яйца 55–64,9 г.', shelf:'25 сут, от 0 °C до +20 °C', maker:'ПАО «Птицефабрика Роскар», Россия', rev:'«Крупные, ни одного битого»'},
+  kefir:   {name:'Кефир 1% «Домик в деревне»', short:'Кефир «Домик в деревне»', unit:'900 мл', base:99, qty:0, sel:0, cat:'Кефир ›', was:1,
             fresh:[{until:'20 июля',days:9,mult:1},{until:'14 июля',days:3,mult:.8}],
-            comp:'Молоко обезжиренное, закваска на кефирных грибках', shelf:'14 сут, от +2 °C до +6 °C', maker:'АО «Данон Россия», Россия', rev:'«Свежий, бодрит по утрам»'},
-  smetana: {name:'Сметана 15% «Простоквашино»', short:'Сметана «Простоквашино»', unit:'300 г', base:119, qty:0, sel:0, cat:'Сметана ›',
+            comp:'Молоко обезжиренное, закваска', full:'Молоко обезжиренное, молоко цельное, закваска на кефирных грибках. Массовая доля жира 1%.', shelf:'14 сут, от +2 °C до +6 °C', maker:'АО «Данон Россия», Россия', rev:'«Свежий, бодрит по утрам»'},
+  smetana: {name:'Сметана 15% «Простоквашино»', short:'Сметана «Простоквашино»', unit:'300 г', base:119, qty:0, sel:0, cat:'Сметана ›', nov:1,
             fresh:[{until:'22 июля',days:11,mult:1}],
-            comp:'Сливки, закваска', shelf:'21 сут, от +2 °C до +6 °C', maker:'АО «Данон Россия», Россия', rev:'«Густая, ложка стоит»'}
+            comp:'Сливки, закваска', full:'Сливки нормализованные, закваска молочнокислых культур. Массовая доля жира 15%.', shelf:'21 сут, от +2 °C до +6 °C', maker:'АО «Данон Россия», Россия', rev:'«Густая, ложка стоит»'}
 };
 const FREE_FROM = 450, PACK = 29;
-let curId = 'milk', tipSel = 0;
+let curId = 'milk', tipSel = 0, filterMode = 'fresh', compAI = true, fav = false;
+let freshestOn = false, savedSel = {};
 
 const fmt = n => n.toLocaleString('ru-RU') + ' ₽';
 const price = (p,i) => Math.round(p.base * p.fresh[i==null?p.sel:i].mult);
@@ -456,8 +492,14 @@ const items = () => Object.entries(P).filter(([,p])=>p.qty>0);
 const totQty = () => Object.values(P).reduce((s,p)=>s+p.qty,0);
 const delivery = () => subtotal() >= FREE_FROM ? 0 : 119;
 const total = () => subtotal() + PACK + delivery();
-const allFresh = () => items().every(([,p])=>p.sel===0);
 const plural = d => d%10==1&&d%100!=11?'день':(d%10>=2&&d%10<=4&&(d%100<10||d%100>=20)?'дня':'дней');
+
+let toastT=null;
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastT); toastT = setTimeout(()=>t.classList.remove('show'), 1700);
+}
 
 function chip(p, id){
   const f = p.fresh[p.sel];
@@ -467,9 +509,20 @@ function chip(p, id){
   return '<span class="fresh '+cls+' nw" onclick="event.stopPropagation();openSheet(\''+id+'\')"><i class="dot"></i>'+label+off+'</span>';
 }
 
-/* ---------- каталог ---------- */
+/* ---------- каталог: фильтры ---------- */
+const FILTERS = [
+  {key:'fresh', label:'🌿 Самое свежее', nw:1, test:()=>true},
+  {key:'was',   label:'↺ Уже брали',    test:p=>p.was},
+  {key:'sale',  label:'％ Скидки',      test:p=>p.fresh.some(f=>f.mult<1)},
+  {key:'nov',   label:'✦ Новинки',      test:p=>p.nov}
+];
+function renderChips(){
+  document.getElementById('chips').innerHTML = FILTERS.map(f=>
+    '<div class="chip '+(filterMode===f.key?'sel':'')+(f.nw?' nw':'')+'" onclick="filterMode=\''+f.key+'\';renderAll()">'+f.label+'</div>').join('');
+}
 function renderGrid(){
-  document.getElementById('grid').innerHTML = Object.entries(P).map(([id,p])=>{
+  const flt = FILTERS.find(f=>f.key===filterMode);
+  document.getElementById('grid').innerHTML = Object.entries(P).filter(([,p])=>flt.test(p)).map(([id,p])=>{
     const pr = price(p);
     const priceHtml = isOff(p) ? '<span class="dsc">'+fmt(pr)+'</span><s>'+fmt(p.base)+'</s>' : fmt(pr);
     const add = p.qty===0
@@ -484,25 +537,44 @@ function renderGrid(){
   }).join('');
   document.getElementById('stripFree').textContent = delivery()===0 ? 'доставка 0 ₽' : '0 ₽ от '+FREE_FROM+' ₽';
 }
+function segFlip(e){
+  const seg = document.getElementById('seg');
+  seg.querySelectorAll(':scope>div').forEach(d=>d.classList.remove('on'));
+  (e.target.closest('#seg>div')||seg.children[1]).classList.add('on');
+  toast('Ассортимент переключён');
+}
 
 /* ---------- нижняя навигация ---------- */
 function navHtml(active){
   const ic = {
-    lavka:'<svg width="26" height="24" viewBox="0 0 26 24" fill="none"><path d="M13 21C7 17 3.5 13 3.5 8.6A5.3 5.3 0 0113 5a5.3 5.3 0 019.5 3.6C22.5 13 19 17 13 21z" fill="#33B8FF"/></svg>',
-    grid:'<svg width="22" height="22" viewBox="0 0 22 22" fill="#1C1B19"><rect x="1" y="1" width="8.5" height="8.5" rx="2.5"/><rect x="12.5" y="1" width="8.5" height="8.5" rx="2.5"/><rect x="1" y="12.5" width="8.5" height="8.5" rx="2.5"/><rect x="12.5" y="12.5" width="8.5" height="8.5" rx="2.5"/></svg>',
-    chef:'<svg width="24" height="22" viewBox="0 0 24 22" fill="none"><path d="M7 13a5 5 0 113-9.6A5.5 5.5 0 0112 3a5.5 5.5 0 012 .4A5 5 0 1117 13v5a2 2 0 01-2 2H9a2 2 0 01-2-2v-5z" stroke="#1C1B19" stroke-width="1.8"/><path d="M9.5 16h5" stroke="#1C1B19" stroke-width="1.8" stroke-linecap="round"/></svg>',
-    cart:'<svg width="24" height="22" viewBox="0 0 24 22" fill="none"><path d="M3 8h18l-1.8 10a2.5 2.5 0 01-2.5 2H7.3a2.5 2.5 0 01-2.5-2L3 8z" stroke="#1C1B19" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 8V6a4 4 0 018 0v2" stroke="#1C1B19" stroke-width="1.8"/></svg>',
-    user:'<svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="6.5" r="4" stroke="#1C1B19" stroke-width="1.8"/><path d="M2.5 20a8.5 8.5 0 0117 0" stroke="#1C1B19" stroke-width="1.8" stroke-linecap="round"/></svg>'
+    lavka:'<svg width="26" height="24" viewBox="0 0 26 24" fill="none"><path d="M13 21C7 17 3.5 13 3.5 8.6A5.3 5.3 0 0113 5a5.3 5.3 0 019.5 3.6C22.5 13 19 17 13 21z" fill="#40BEFA"/></svg>',
+    grid:'<svg width="22" height="22" viewBox="0 0 22 22" fill="#21201F"><rect x="1" y="1" width="8.5" height="8.5" rx="2.5"/><rect x="12.5" y="1" width="8.5" height="8.5" rx="2.5"/><rect x="1" y="12.5" width="8.5" height="8.5" rx="2.5"/><rect x="12.5" y="12.5" width="8.5" height="8.5" rx="2.5"/></svg>',
+    chef:'<svg width="24" height="22" viewBox="0 0 24 22" fill="none"><path d="M7 13a5 5 0 113-9.6A5.5 5.5 0 0112 3a5.5 5.5 0 012 .4A5 5 0 1117 13v5a2 2 0 01-2 2H9a2 2 0 01-2-2v-5z" stroke="#21201F" stroke-width="1.8"/><path d="M9.5 16h5" stroke="#21201F" stroke-width="1.8" stroke-linecap="round"/></svg>',
+    cart:'<svg width="24" height="22" viewBox="0 0 24 22" fill="none"><path d="M3 8h18l-1.8 10a2.5 2.5 0 01-2.5 2H7.3a2.5 2.5 0 01-2.5-2L3 8z" stroke="#21201F" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 8V6a4 4 0 018 0v2" stroke="#21201F" stroke-width="1.8"/></svg>',
+    user:'<svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="6.5" r="4" stroke="#21201F" stroke-width="1.8"/><path d="M2.5 20a8.5 8.5 0 0117 0" stroke="#21201F" stroke-width="1.8" stroke-linecap="round"/></svg>'
   };
   const bdg = totQty()>0 ? '<span class="bdg">'+totQty()+'</span>' : '';
   return '<div class="ni '+(active=='lavka'?'on':'')+'" onclick="goto(\'s1\')">'+ic.lavka+'</div>'+
-    '<div class="ni">'+ic.grid+'</div><div class="ni">'+ic.chef+'</div>'+
+    '<div class="ni" onclick="toast(\'Каталог категорий — вне сценария\')">'+ic.grid+'</div>'+
+    '<div class="ni" onclick="toast(\'Готовая еда — вне сценария\')">'+ic.chef+'</div>'+
     '<div class="ni '+(active=='cart'?'on':'')+'" onclick="goto(\'s3\')">'+ic.cart+bdg+'</div>'+
-    '<div class="ni">'+ic.user+'</div>';
+    '<div class="ni" onclick="toast(\'Профиль — вне сценария\')">'+ic.user+'</div>';
 }
 
 /* ---------- карточка ---------- */
-function openProduct(id){ curId = id; renderProduct(); goto('s2'); }
+function openProduct(id){ curId = id; fav=false; compAI=true; renderProduct(); goto('s2'); }
+function favFlip(){
+  fav = !fav;
+  document.getElementById('favPath').setAttribute('fill', fav ? '#FC5230' : 'none');
+  document.getElementById('favPath').setAttribute('stroke', fav ? '#FC5230' : '#21201F');
+  toast(fav ? 'Добавили в любимое' : 'Убрали из любимого');
+}
+function compMode(ai){
+  compAI = ai;
+  document.getElementById('tabAI').classList.toggle('act', ai);
+  document.getElementById('tabFull').style.color = ai ? 'var(--faint)' : 'var(--ink)';
+  renderProduct();
+}
 function renderProduct(){
   const p = P[curId], f = p.fresh[p.sel];
   document.getElementById('hero').innerHTML = ART[curId];
@@ -510,7 +582,9 @@ function renderProduct(){
   document.getElementById('punit').textContent = p.unit;
   document.getElementById('crumb1').textContent = p.cat;
   document.getElementById('prev').textContent = p.rev;
-  document.getElementById('pcomp').textContent = p.comp;
+  document.getElementById('compCap').textContent = compAI ? 'Краткий состав' : 'Полный состав';
+  document.getElementById('pcomp').textContent = compAI ? p.comp : p.full;
+  document.getElementById('compNote').style.display = compAI ? 'block' : 'none';
   document.getElementById('pshelf').textContent = p.shelf;
   document.getElementById('pmaker').textContent = p.maker;
   const fc = document.getElementById('fcard');
@@ -523,7 +597,7 @@ function renderProduct(){
   const priceHtml = isOff(p) ? fmt(pr)+' <s>'+fmt(p.base)+'</s>' : fmt(pr);
   if(p.qty===0){
     bar.innerHTML = '<span class="p">'+priceHtml+'</span><span class="lbl">В корзину</span><span style="width:56px"></span>';
-    bar.onclick = ()=>{ inc(curId,1); };
+    bar.onclick = ()=>{ inc(curId,1); toast('Добавили в корзину'); };
   }else{
     bar.innerHTML = '<span class="p">'+priceHtml+'</span><span class="lbl">В корзине · перейти</span>'+
       '<span class="cnt" onclick="event.stopPropagation()"><span onclick="inc(\''+curId+'\',-1)">−</span>'+p.qty+'<span onclick="inc(\''+curId+'\',1)">+</span></span>';
@@ -536,7 +610,7 @@ function renderCart(){
   const body = document.getElementById('cartBody');
   const bar = document.getElementById('cartBar');
   if(items().length===0){
-    body.innerHTML = '<div class="empty">В корзине пока ничего нет.<br>Самое время наполнить её!</div>';
+    body.innerHTML = '<div class="empty"><b>🛒</b>В корзине пока ничего нет.<br>Самое время наполнить её!</div>';
     bar.style.display='none';
     return;
   }
@@ -546,12 +620,13 @@ function renderCart(){
   const etaSub = del===0 ? 'до бесплатной доставки — выполнено' : 'До бесплатной доставки '+fmt(togo);
   const pct = Math.min(100, st/FREE_FROM*100);
   const coins = Math.floor(total()/20);
+  const anyShort = items().some(([,p])=>p.sel>0);
   body.innerHTML =
     '<div class="eta"><b>'+etaTitle+'</b><span class="togo">'+etaSub+'</span><div class="pbar"><i style="width:'+pct+'%"></i></div></div>'+
-    '<div class="coinrow"><div class="cn"><svg width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="9" fill="#F2C230"/><circle cx="11" cy="11" r="6" fill="#FFDE6E"/></svg></div><div><b>'+coins+' монеток после доставки</b><span>Ещё 150 за каждые 2 000 ₽</span></div><div class="pz press">Призы ›</div></div>'+
-    '<div class="ftg nw '+(allFresh()?'on':'')+'" onclick="toggleFreshest()">'+
-      '<svg width="24" height="24" viewBox="0 0 20 20" fill="none"><path d="M4 12c4-1 7-4 8.5-8.5C13.5 8 12 14 4 12z" fill="#1FA95C"/></svg>'+
-      '<div class="tx"><b>Привезти самое свежее</b><span>'+(allFresh()?'Сборщик выберет партии с максимальным сроком годности':'Выключено: у части позиций выбран короткий срок со скидкой')+'</span></div>'+
+    '<div class="coinrow"><div class="cn"><svg width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="9" fill="#F2C230"/><circle cx="11" cy="11" r="6" fill="#FFDE6E"/></svg></div><div><b>'+coins+' монеток после доставки</b><span>Ещё 150 за каждые 2 000 ₽</span></div><div class="pz press" onclick="toast(\'Призы — вне сценария прототипа\')">Призы ›</div></div>'+
+    '<div class="ftg nw '+(freshestOn?'on':'')+'" onclick="toggleFreshest()">'+
+      '<svg width="24" height="24" viewBox="0 0 20 20" fill="none"><path d="M4 12c4-1 7-4 8.5-8.5C13.5 8 12 14 4 12z" fill="#00B45A"/></svg>'+
+      '<div class="tx"><b>Привезти самое свежее</b><span>'+(freshestOn?'Сборщик выберет партии с максимальным сроком годности':(anyShort?'Выключено: у части позиций выбран короткий срок со скидкой':'Выключено: партии можно выбирать вручную'))+'</span></div>'+
       '<div class="sw2"></div></div>'+
     items().map(([id,p])=>{
       const pr = price(p);
@@ -562,27 +637,42 @@ function renderCart(){
           chip(p,id)+'</div>'+
         '<div class="cnt"><span onclick="inc(\''+id+'\',-1)">−</span>'+p.qty+'<span onclick="inc(\''+id+'\',1)">+</span></div></div>';
     }).join('')+
-    '<div class="srow">Упаковка заказа<span class="amt">'+fmt(PACK)+'</span></div>'+
+    '<div class="srow" onclick="toast(\'Пакет + термоупаковка для скоропорта\')">Упаковка заказа<span class="amt">'+fmt(PACK)+'</span></div>'+
     (del>0?'<div class="srow">Доставка<small>бесплатно от '+FREE_FROM+' ₽</small><span class="amt">'+fmt(del)+'</span></div>':'');
   bar.innerHTML = '<span class="p">15–25 мин</span><span class="lbl">К оплате</span><span class="cnt">'+fmt(total())+'</span>'+
     '<span class="coins">'+Math.max(1,Math.floor(total()/78))+' <svg width="12" height="12" viewBox="0 0 22 22"><circle cx="11" cy="11" r="9" fill="#F2C230"/></svg></span>';
 }
 function toggleFreshest(){
-  if(!allFresh()) Object.values(P).forEach(p=>p.sel=0);
+  if(!freshestOn){
+    savedSel = {}; Object.entries(P).forEach(([id,p])=>{ savedSel[id]=p.sel; p.sel=0; });
+    freshestOn = true;
+    toast('Сборщик возьмёт самые свежие партии');
+  }else{
+    Object.entries(P).forEach(([id,p])=>{ if(savedSel[id]!=null) p.sel=savedSel[id]; });
+    freshestOn = false;
+    toast('Выбор партий снова ручной');
+  }
+  renderAll();
+}
+function clearCart(){
+  if(items().length===0){ toast('Корзина уже пуста'); return; }
+  Object.values(P).forEach(p=>p.qty=0);
+  toast('Корзина очищена');
   renderAll();
 }
 
 /* ---------- чекаут ---------- */
+function doorFlip(){ document.getElementById('doorTg').classList.toggle('on'); }
 function renderTips(){
   const st = Math.max(subtotal(),1);
   const tips = [{l:'Без чаевых'},{l:'3%',v:Math.round(st*.03)},{l:'5%',v:Math.round(st*.05)},{l:'10%',v:Math.round(st*.1)},{l:'Другое'}];
   document.getElementById('tips').innerHTML = tips.map((t,i)=>
-    '<div class="tip press '+(i===tipSel?'sel':'')+'" onclick="tipSel='+i+';renderAll()"><b>'+t.l+'</b>'+(t.v?'<span>'+t.v+' ₽</span>':'<span>&nbsp;</span>')+'</div>').join('');
+    '<div class="tip press '+(i===tipSel?'sel':'')+'" onclick="pickTip('+i+')"><b>'+t.l+'</b>'+(t.v?'<span>'+t.v+' ₽</span>':'<span>&nbsp;</span>')+'</div>').join('');
   const tipV = tips[tipSel].v||0;
   document.getElementById('payBar').innerHTML = '<span class="p">15–25 мин</span><span class="lbl">Оплатить</span><span class="cnt">'+fmt(total()+tipV)+'</span>';
 }
-function selPay(el){ el.parentElement.querySelectorAll('.pc').forEach(c=>c.classList.remove('sel')); el.classList.add('sel'); }
-function pay(){ goto('s5'); }
+function pickTip(i){ if(i===4){ toast('Своя сумма — вне сценария прототипа'); return; } tipSel=i; renderAll(); }
+function selPay(el){ el.parentElement.querySelectorAll('.pc').forEach(c=>c.classList.remove('sel')); el.classList.add('sel'); toast('Способ оплаты выбран'); }
 
 /* ---------- заказ ---------- */
 let scanTimer=null;
@@ -602,12 +692,14 @@ function renderOrder(){
   })();
 }
 
-/* ---------- шторка партий ---------- */
+/* ---------- шторки ---------- */
+function sheetHtml(html){ document.getElementById('sheet').innerHTML = html; document.getElementById('glass').classList.add('sheet-open'); }
+function closeSheet(){ document.getElementById('glass').classList.remove('sheet-open'); }
+
 function openSheet(id){
   curId = id;
   const p = P[id];
-  const sh = document.getElementById('sheet');
-  sh.innerHTML = '<div class="grab"></div>'+
+  sheetHtml('<div class="grab"></div>'+
     '<h3>Какую партию привезти?</h3>'+
     '<p class="sub">'+(p.fresh.length>1?'На складе две партии этого товара':'На складе одна партия этого товара')+'</p>'+
     p.fresh.map((f,i)=>
@@ -616,15 +708,49 @@ function openSheet(id){
         '<div class="tx"><b>'+(i===0?'Самая свежая':'Съем сегодня-завтра')+'</b><span>годна до '+f.until+' · ещё '+f.days+' '+plural(f.days)+'</span></div>'+
         '<div class="pr">'+fmt(price(p,i))+(f.mult<1?'<span class="offb">−20%</span><s>'+fmt(p.base)+'</s>':'')+'</div></div>').join('')+
     '<div class="note"><svg width="18" height="16" viewBox="0 0 18 16" fill="none" style="flex:0 0 18px;margin-top:1px"><rect x="1" y="4" width="16" height="11" rx="2.5" stroke="#6B6763" stroke-width="1.5"/><circle cx="9" cy="9.5" r="3" stroke="#6B6763" stroke-width="1.5"/><path d="M6 4l1.2-2h3.6L12 4" stroke="#6B6763" stroke-width="1.5"/></svg>Сборщик отсканирует срок годности вашей партии — дата придёт в электронном чеке. Не совпало — вернём деньги мгновенно.</div>'+
-    '<button class="ybtn" onclick="closeSheet()">Готово</button>';
-  document.getElementById('glass').classList.add('sheet-open');
+    '<button class="ybtn" onclick="closeSheet()">Готово</button>');
 }
-function pickBatch(id,i){ P[id].sel=i; renderAll(); openSheet(id); }
-function closeSheet(){ document.getElementById('glass').classList.remove('sheet-open'); }
+function pickBatch(id,i){
+  P[id].sel=i;
+  if(i>0) freshestOn = false;
+  renderAll(); openSheet(id);
+}
+
+function openSearch(){
+  sheetHtml('<div class="grab"></div>'+
+    '<div class="srch"><svg width="16" height="16" viewBox="0 0 18 18" fill="none"><circle cx="7.5" cy="7.5" r="6" stroke="#9E9B98" stroke-width="2"/><path d="M12.5 12.5L17 17" stroke="#9E9B98" stroke-width="2" stroke-linecap="round"/></svg>'+
+    '<input id="srchIn" placeholder="Найти в Лавке" oninput="renderSearch()"><span class="alisa" style="width:22px;height:22px;flex-basis:22px"></span></div>'+
+    '<div id="srchRes"></div>');
+  renderSearch();
+  setTimeout(()=>{ const el=document.getElementById('srchIn'); if(el) el.focus(); }, 320);
+}
+function renderSearch(){
+  const q = (document.getElementById('srchIn')?.value||'').toLowerCase();
+  const res = Object.entries(P).filter(([,p])=>p.name.toLowerCase().includes(q));
+  document.getElementById('srchRes').innerHTML = res.length===0
+    ? '<div class="empty" style="padding:30px 10px">Ничего не нашлось</div>'
+    : res.map(([id,p])=>'<div class="srchres" onclick="closeSheet();openProduct(\''+id+'\')">'+
+        '<div class="im">'+ART[id]+'</div>'+
+        '<div style="flex:1;min-width:0"><b>'+p.name+'</b><span>'+p.unit+' · '+(p.fresh[p.sel].days<=2?'до '+p.fresh[p.sel].until:'ещё '+p.fresh[p.sel].days+' '+plural(p.fresh[p.sel].days))+'</span></div>'+
+        '<div class="pr">'+fmt(price(p))+'</div></div>').join('');
+}
+
+function openAI(){
+  const p = P[curId], f0 = p.fresh[0], hasShort = p.fresh.length>1;
+  sheetHtml('<div class="grab"></div>'+
+    '<h3 style="display:flex;align-items:center;gap:9px"><span class="alisa"></span>Лавка AI</h3>'+
+    '<p class="sub">AI пока учится и может ошибаться</p>'+
+    '<div class="bub user">Насколько свежий товар привезёте?</div>'+
+    '<div class="bub ai">Сейчас на складе партия «'+p.short+'» со сроком до '+f0.until+' — ещё '+f0.days+' '+plural(f0.days)+'.'+
+      (hasShort?' Есть и партия подешевле — до '+p.fresh[1].until+' со скидкой −20%, если планируете съесть сразу.':'')+
+      ' Сборщик отсканирует срок вашей партии, дата придёт в чеке.</div>'+
+    (hasShort?'<button class="ybtn" style="margin-top:6px" onclick="closeSheet();openSheet(curId)">Выбрать партию</button>':'<button class="ybtn" style="margin-top:6px" onclick="closeSheet()">Понятно</button>'));
+}
 
 /* ---------- общее ---------- */
 function inc(id,d){ P[id].qty = Math.max(0, P[id].qty+d); renderAll(); }
 function renderAll(){
+  renderChips();
   renderGrid();
   document.getElementById('nav1').innerHTML = navHtml('lavka');
   document.getElementById('nav3').innerHTML = navHtml('cart');
