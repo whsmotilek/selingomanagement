@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Лавка · Свежесть под контролем — прототип</title>
+<style>
+  :root{
+    --ink:#21201F; --sub:#9E9B98; --faint:#C9C6C2;
+    --bg:#F3F1EF; --card:#FFFFFF; --line:#EEECE9;
+    --yellow:#FFE033; --yellow-press:#F5D51F;
+    --green:#1FA95C; --green-bg:#E9F7EF;
+    --orange:#EE8A1F; --orange-bg:#FDF1E1;
+    --red:#F04D3A;
+    --accent:#7B61FF;
+    --r-lg:24px; --r-md:18px; --r-sm:12px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    background:#E9E6E2; color:var(--ink);
+    display:flex; align-items:center; justify-content:center; gap:48px;
+    min-height:100dvh; padding:24px;
+  }
+
+  /* ---------- aside ---------- */
+  .aside{max-width:330px}
+  .aside .tag{display:inline-block;font-size:12px;font-weight:600;color:#6B6763;background:#DEDAD5;border-radius:100px;padding:6px 12px;margin-bottom:14px}
+  .aside h1{font-size:28px;line-height:1.15;letter-spacing:-.5px;margin-bottom:10px}
+  .aside p.lead{font-size:15px;line-height:1.45;color:#5F5B57;margin-bottom:22px}
+  .steps{display:flex;flex-direction:column;gap:8px;margin-bottom:22px}
+  .step{display:flex;gap:12px;align-items:center;background:#F5F3F0;border:1px solid transparent;border-radius:16px;padding:12px 14px;cursor:pointer;transition:.15s}
+  .step:hover{background:#fff}
+  .step.on{background:#fff;border-color:#D8D4CF;box-shadow:0 4px 14px rgba(0,0,0,.06)}
+  .step b{display:block;font-size:14px}
+  .step span{font-size:12.5px;color:var(--sub)}
+  .step .n{flex:0 0 28px;height:28px;border-radius:50%;background:var(--yellow);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center}
+  .hl-toggle{display:flex;align-items:center;gap:10px;font-size:13.5px;color:#5F5B57;cursor:pointer;user-select:none}
+  .hl-toggle .sw{width:40px;height:24px;border-radius:100px;background:#D4D0CB;position:relative;transition:.2s}
+  .hl-toggle .sw::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.2s}
+  body.hl .hl-toggle .sw{background:var(--accent)}
+  body.hl .hl-toggle .sw::after{left:19px}
+  .aside .foot{margin-top:22px;font-size:12px;color:#8B8783;line-height:1.5}
+
+  /* highlight new elements */
+  body.hl .nw{outline:2px dashed var(--accent);outline-offset:3px;border-radius:14px}
+
+  /* ---------- phone ---------- */
+  .phone{
+    width:390px;height:812px;flex:0 0 auto;background:#000;border-radius:54px;padding:10px;
+    box-shadow:0 24px 60px rgba(0,0,0,.28);
+  }
+  .glass{position:relative;width:100%;height:100%;background:var(--bg);border-radius:44px;overflow:hidden}
+  .statusbar{position:absolute;top:0;left:0;right:0;height:44px;z-index:40;display:flex;align-items:center;justify-content:space-between;padding:0 28px;font-size:14px;font-weight:600;pointer-events:none}
+  .statusbar .icons{display:flex;gap:5px;align-items:center;font-size:12px}
+
+  .screen{position:absolute;inset:0;display:none;flex-direction:column;background:var(--bg)}
+  .screen.on{display:flex}
+  .scroll{flex:1;overflow-y:auto;padding:56px 16px 120px;scrollbar-width:none}
+  .scroll::-webkit-scrollbar{display:none}
+
+  .hdr{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .hdr .rnd{flex:0 0 44px;height:44px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+  .hdr h2{font-size:22px;letter-spacing:-.4px;flex:1}
+
+  .chips{display:flex;gap:8px;overflow-x:auto;margin-bottom:16px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:0 0 auto;background:#fff;border-radius:100px;padding:9px 14px;font-size:13.5px;font-weight:500;color:var(--ink);cursor:pointer}
+  .chip.sel{background:var(--ink);color:#fff}
+
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .tile{background:var(--card);border-radius:var(--r-lg);padding:8px 8px 12px;cursor:pointer}
+  .tile .img{position:relative;height:110px;border-radius:var(--r-md);background:#F6F4F1;display:flex;align-items:center;justify-content:center;font-size:52px;margin-bottom:8px}
+  .tile .plus{position:absolute;right:6px;bottom:6px;width:34px;height:34px;border-radius:50%;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.12);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:500}
+  .tile .price{font-size:17px;font-weight:700;padding:0 4px}
+  .tile .price s{font-size:13px;color:var(--faint);font-weight:500;margin-left:4px}
+  .tile .price .dsc{color:var(--red)}
+  .tile .name{font-size:13.5px;line-height:1.25;color:var(--ink);padding:2px 4px 6px;min-height:38px}
+  .fresh{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;border-radius:100px;padding:4px 8px;margin:0 4px}
+  .fresh.g{background:var(--green-bg);color:var(--green)}
+  .fresh.o{background:var(--orange-bg);color:var(--orange)}
+  .fresh .dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+
+  /* product screen */
+  .crumbs{display:flex;gap:6px;margin-bottom:10px}
+  .crumb{background:#fff;border-radius:100px;padding:8px 12px;font-size:12.5px;color:#6B6763}
+  .hero{background:#fff;border-radius:var(--r-lg);height:250px;display:flex;align-items:center;justify-content:center;font-size:110px;margin-bottom:6px}
+  .dots{display:flex;gap:5px;justify-content:center;margin-bottom:14px}
+  .dots i{width:6px;height:6px;border-radius:50%;background:#D8D4CF}
+  .dots i:first-child{background:var(--ink)}
+  .ptitle{font-size:23px;line-height:1.15;letter-spacing:-.4px;margin-bottom:2px}
+  .ptitle small{display:block;font-size:16px;color:var(--faint);font-weight:400;margin-top:4px}
+
+  .fcard{background:var(--green-bg);border-radius:var(--r-md);padding:14px;margin:16px 0 10px;display:flex;align-items:center;gap:12px;cursor:pointer}
+  .fcard.short{background:var(--orange-bg)}
+  .fcard .ico{flex:0 0 40px;height:40px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:20px}
+  .fcard .tx{flex:1}
+  .fcard .tx em{display:block;font-style:normal;font-size:12px;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:.3px}
+  .fcard.short .tx em{color:var(--orange)}
+  .fcard .tx b{display:block;font-size:16.5px;margin:2px 0}
+  .fcard .tx span{font-size:12.5px;color:#6B6763}
+  .fcard .bar{height:4px;border-radius:4px;background:#fff;margin-top:8px;overflow:hidden}
+  .fcard .bar i{display:block;height:100%;width:78%;background:var(--green);border-radius:4px}
+  .fcard.short .bar i{width:18%;background:var(--orange)}
+  .fcard .chev{color:#B9B5B0;font-size:20px}
+
+  .row{background:#fff;border-radius:var(--r-md);padding:15px 14px;display:flex;align-items:center;gap:10px;font-size:14.5px;margin-bottom:8px}
+  .row .chev{margin-left:auto;color:#C9C6C2}
+
+  .bbar{position:absolute;left:12px;right:12px;bottom:14px;z-index:30;display:flex;align-items:center;gap:10px;background:var(--yellow);border-radius:20px;padding:8px 8px 8px 20px;box-shadow:0 8px 24px rgba(0,0,0,.14);cursor:pointer}
+  .bbar .p{font-size:19px;font-weight:700}
+  .bbar .p s{font-size:13px;font-weight:500;color:rgba(0,0,0,.4);margin-left:4px}
+  .bbar .lbl{flex:1;text-align:center;font-size:16px;font-weight:600}
+  .bbar .cnt{background:rgba(255,255,255,.65);border-radius:14px;padding:10px 14px;font-size:15px;font-weight:600;display:flex;gap:14px}
+  .bbar .cnt span{cursor:pointer}
+
+  /* bottom sheet */
+  .veil{position:absolute;inset:0;background:rgba(0,0,0,.35);z-index:50;opacity:0;pointer-events:none;transition:.2s}
+  .sheet{position:absolute;left:0;right:0;bottom:0;z-index:51;background:#fff;border-radius:28px 28px 0 0;padding:20px 16px 22px;transform:translateY(105%);transition:.28s cubic-bezier(.3,.9,.3,1)}
+  .glass.sheet-open .veil{opacity:1;pointer-events:auto}
+  .glass.sheet-open .sheet{transform:translateY(0)}
+  .sheet .grab{width:36px;height:4px;border-radius:4px;background:#E4E1DD;margin:0 auto 16px}
+  .sheet h3{font-size:20px;letter-spacing:-.3px;margin-bottom:4px}
+  .sheet .sub{font-size:13.5px;color:var(--sub);margin-bottom:14px}
+  .opt{border:1.5px solid var(--line);border-radius:var(--r-md);padding:14px;display:flex;gap:12px;align-items:center;margin-bottom:10px;cursor:pointer}
+  .opt.sel{border-color:var(--ink)}
+  .opt .rad{flex:0 0 22px;height:22px;border-radius:50%;border:1.5px solid #D4D0CB;position:relative}
+  .opt.sel .rad{border-color:var(--ink)}
+  .opt.sel .rad::after{content:"";position:absolute;inset:4px;border-radius:50%;background:var(--ink)}
+  .opt .tx{flex:1}
+  .opt .tx b{display:block;font-size:15px}
+  .opt .tx span{font-size:12.5px;color:var(--sub)}
+  .opt .pr{font-size:15px;font-weight:700;text-align:right}
+  .opt .pr .off{display:inline-block;background:var(--red);color:#fff;font-size:11px;font-weight:700;border-radius:100px;padding:2px 7px;margin-left:5px;vertical-align:1px}
+  .opt .pr s{display:block;font-size:12px;color:var(--faint);font-weight:500}
+  .sheet .note{display:flex;gap:9px;font-size:12.5px;color:#6B6763;line-height:1.4;background:#F6F4F1;border-radius:var(--r-sm);padding:11px 12px;margin:4px 0 14px}
+  .ybtn{width:100%;border:0;background:var(--yellow);border-radius:var(--r-md);padding:17px;font-size:16px;font-weight:600;font-family:inherit;cursor:pointer}
+  .ybtn:active{background:var(--yellow-press)}
+
+  /* cart */
+  .eta{background:#fff;border-radius:var(--r-lg);padding:16px;margin-bottom:10px}
+  .eta b{font-size:19px}
+  .eta span{display:block;font-size:13px;color:var(--sub);margin-top:2px}
+  .fresh-toggle{background:var(--green-bg);border-radius:var(--r-md);padding:14px;display:flex;gap:12px;align-items:center;margin-bottom:10px;cursor:pointer}
+  .fresh-toggle .tx{flex:1}
+  .fresh-toggle .tx b{display:block;font-size:15px}
+  .fresh-toggle .tx span{font-size:12.5px;color:#57755F;line-height:1.3;display:block;margin-top:2px}
+  .sw2{flex:0 0 46px;height:28px;border-radius:100px;background:#CFE7D6;position:relative;transition:.2s}
+  .sw2::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 4px rgba(0,0,0,.15)}
+  .fresh-toggle.on .sw2{background:var(--green)}
+  .fresh-toggle.on .sw2::after{left:21px}
+  .citem{background:#fff;border-radius:var(--r-lg);padding:12px;display:flex;gap:12px;margin-bottom:8px}
+  .citem .im{flex:0 0 62px;height:62px;border-radius:var(--r-sm);background:#F6F4F1;display:flex;align-items:center;justify-content:center;font-size:30px}
+  .citem .tx{flex:1;min-width:0}
+  .citem .tx .nm{font-size:14px;line-height:1.25}
+  .citem .tx .pw{font-size:14.5px;font-weight:700;margin-top:3px}
+  .citem .tx .pw s{color:var(--faint);font-weight:500;font-size:12px;margin-left:4px}
+  .citem .tx .fresh{margin:6px 0 0}
+  .citem .cnt{align-self:center;background:#F3F1EF;border-radius:12px;padding:8px 12px;font-size:14px;font-weight:600;display:flex;gap:12px}
+  .srow{background:#fff;border-radius:var(--r-md);padding:14px;display:flex;font-size:14px;margin-bottom:8px}
+  .srow span{margin-left:auto;font-weight:600}
+
+  /* order */
+  .prog{display:flex;align-items:center;justify-content:center;gap:0;margin:26px 0 20px}
+  .prog .st{width:52px;height:52px;border-radius:50%;background:#EBE8E5;display:flex;align-items:center;justify-content:center;font-size:22px}
+  .prog .st.done,.prog .st.act{background:var(--yellow)}
+  .prog .st.act{animation:pulse 1.6s infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,224,51,.7)}55%{box-shadow:0 0 0 12px rgba(255,224,51,0)}}
+  .prog .ln{width:26px;height:3px;background:#EBE8E5}
+  .prog .ln.done{background:var(--yellow)}
+  .ocen{text-align:center;margin-bottom:18px}
+  .ocen h2{font-size:24px;letter-spacing:-.4px}
+  .ocen p{font-size:14px;color:var(--sub);margin-top:4px}
+  .scan{background:#fff;border-radius:var(--r-lg);padding:16px;margin-bottom:10px}
+  .scan .cap{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;margin-bottom:12px}
+  .scan .cap .ok{color:var(--green)}
+  .sitem{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line);font-size:14px}
+  .sitem:first-of-type{border-top:0}
+  .sitem .em{flex:0 0 30px;text-align:center;font-size:19px}
+  .sitem .tx{flex:1}
+  .sitem .tx span{display:block;font-size:12px;color:var(--sub)}
+  .sitem .ck{color:var(--green);font-weight:700;opacity:0;transform:scale(.4);transition:.35s cubic-bezier(.2,1.6,.4,1)}
+  .sitem .ck.show{opacity:1;transform:scale(1)}
+  .scan .foot{font-size:12.5px;color:#6B6763;line-height:1.45;background:#F6F4F1;border-radius:var(--r-sm);padding:11px 12px;margin-top:10px}
+  .btnrow{display:flex;gap:8px}
+  .gbtn{flex:1;border:0;background:#fff;border-radius:var(--r-md);padding:16px;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer}
+  .btnrow .ybtn{flex:1;width:auto}
+
+  /* bottom nav */
+  .nav{position:absolute;left:0;right:0;bottom:0;z-index:20;background:rgba(243,241,239,.94);backdrop-filter:blur(8px);display:flex;padding:10px 10px calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--line)}
+  .nav .ni{flex:1;display:flex;align-items:center;justify-content:center;font-size:22px;opacity:.32;cursor:pointer;position:relative}
+  .nav .ni.on{opacity:1}
+  .nav .ni .bdg{position:absolute;top:-6px;right:22%;min-width:18px;height:18px;border-radius:100px;background:var(--red);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 5px}
+
+  @media (max-width:900px){
+    body{flex-direction:column;gap:20px;padding:16px 12px}
+    .aside{max-width:390px;order:2}
+    .phone{width:min(390px,100%);height:min(812px,178vw)}
+  }
+</style>
+</head>
+<body class="hl">
+
+<aside class="aside">
+  <span class="tag">Концепт-прототип · не является продуктом Яндекса</span>
+  <h1>Свежесть под контролем</h1>
+  <p class="lead">Фича для Яндекс Лавки: срок годности партии виден до заказа — и покупатель сам выбирает, какую свежесть привезти.</p>
+  <div class="steps">
+    <div class="step on" data-go="s1"><span class="n">1</span><div><b>Каталог</b><span>бейдж свежести на каждом товаре</span></div></div>
+    <div class="step" data-go="s2"><span class="n">2</span><div><b>Карточка товара</b><span>срок партии + выбор «свежая / короткий срок −20%»</span></div></div>
+    <div class="step" data-go="s3"><span class="n">3</span><div><b>Корзина</b><span>тумблер «Привезти самое свежее»</span></div></div>
+    <div class="step" data-go="s4"><span class="n">4</span><div><b>Заказ</b><span>сборщик сканирует партии — даты в чеке</span></div></div>
+  </div>
+  <label class="hl-toggle" onclick="document.body.classList.toggle('hl')"><span class="sw"></span>Подсветить новые элементы</label>
+  <p class="foot">Кейс для стажировки «Go в менеджмент» · Матвей Селин<br>Прототип кликабельный: работают карточка, выбор партии, корзина и оформление.</p>
+</aside>
+
+<div class="phone"><div class="glass" id="glass">
+  <div class="statusbar"><span>12:20</span><span class="icons">📶 📡 🔋</span></div>
+
+  <!-- S1 CATALOG -->
+  <section class="screen on" id="s1">
+    <div class="scroll">
+      <div class="hdr"><div class="rnd">←</div><h2>Молоко и яйца</h2><div class="rnd">🔍</div></div>
+      <div class="chips">
+        <div class="chip sel nw">🌿 Самое свежее</div>
+        <div class="chip">Скидки %</div>
+        <div class="chip">Из Лавки</div>
+        <div class="chip">Новинки</div>
+      </div>
+      <div class="grid">
+        <div class="tile" onclick="goto('s2')">
+          <div class="img">🥛<div class="plus">+</div></div>
+          <div class="price" id="tilePrice">119 ₽</div>
+          <div class="name">Молоко «Домик в&nbsp;деревне» 3,2% <span style="color:var(--faint)">930 мл</span></div>
+          <div class="fresh g nw"><i class="dot"></i>ещё 12 дней</div>
+        </div>
+        <div class="tile">
+          <div class="img">🍮<div class="plus">+</div></div>
+          <div class="price">149 ₽</div>
+          <div class="name">Творог 5% «Из Лавки» <span style="color:var(--faint)">250 г</span></div>
+          <div class="fresh g nw"><i class="dot"></i>ещё 6 дней</div>
+        </div>
+        <div class="tile">
+          <div class="img">🥞<div class="plus">+</div></div>
+          <div class="price"><span class="dsc">215 ₽</span><s>269 ₽</s></div>
+          <div class="name">Сырники «Из Лавки» <span style="color:var(--faint)">300 г</span></div>
+          <div class="fresh o nw"><i class="dot"></i>до завтра · −20%</div>
+        </div>
+        <div class="tile">
+          <div class="img">🥚<div class="plus">+</div></div>
+          <div class="price">129 ₽</div>
+          <div class="name">Яйца куриные С1 <span style="color:var(--faint)">10 шт</span></div>
+          <div class="fresh g nw"><i class="dot"></i>ещё 18 дней</div>
+        </div>
+        <div class="tile">
+          <div class="img">🥤<div class="plus">+</div></div>
+          <div class="price">99 ₽</div>
+          <div class="name">Кефир 1% «Домик в&nbsp;деревне» <span style="color:var(--faint)">900 мл</span></div>
+          <div class="fresh g nw"><i class="dot"></i>ещё 9 дней</div>
+        </div>
+        <div class="tile">
+          <div class="img">🥣<div class="plus">+</div></div>
+          <div class="price">119 ₽</div>
+          <div class="name">Сметана 15% «Простоквашино» <span style="color:var(--faint)">300 г</span></div>
+          <div class="fresh g nw"><i class="dot"></i>ещё 11 дней</div>
+        </div>
+      </div>
+    </div>
+    <nav class="nav">
+      <div class="ni on">🫐</div><div class="ni">▦</div><div class="ni">🍳</div>
+      <div class="ni" onclick="goto('s3')">🧺<span class="bdg">3</span></div><div class="ni">👤</div>
+    </nav>
+  </section>
+
+  <!-- S2 PRODUCT -->
+  <section class="screen" id="s2">
+    <div class="scroll">
+      <div class="crumbs"><span class="crumb">Молоко ›</span><span class="crumb">Пастеризованное ›</span><span class="crumb" style="margin-left:auto;cursor:pointer" onclick="goto('s1')">✕</span></div>
+      <div class="hero">🥛</div>
+      <div class="dots"><i></i><i></i></div>
+      <h2 class="ptitle">Молоко «Домик в деревне» пастеризованное 3,2%<small>930 мл</small></h2>
+
+      <div class="fcard nw" id="fcard" onclick="openSheet()">
+        <div class="ico">🌿</div>
+        <div class="tx">
+          <em id="fLbl">Свежесть партии</em>
+          <b id="fBig">Годен ещё 12 дней</b>
+          <span id="fSub">до 23 июля · привезём эту партию</span>
+          <div class="bar"><i></i></div>
+        </div>
+        <div class="chev">›</div>
+      </div>
+
+      <div class="row">🔵 Спросить Лавку AI<span class="chev">›</span></div>
+      <div class="row">Подробнее о товаре<span class="chev">⌄</span></div>
+    </div>
+    <div class="bbar" onclick="goto('s3')">
+      <span class="p" id="pPrice">119 ₽</span>
+      <span class="lbl">В корзину</span>
+      <span class="cnt"><span onclick="event.stopPropagation()">−</span>1<span onclick="event.stopPropagation()">+</span></span>
+    </div>
+
+    <div class="veil" onclick="closeSheet()"></div>
+    <div class="sheet">
+      <div class="grab"></div>
+      <h3>Какую партию привезти?</h3>
+      <p class="sub">На складе две партии этого товара</p>
+      <div class="opt sel" id="optA" onclick="pick('A')">
+        <div class="rad"></div>
+        <div class="tx"><b>Самая свежая</b><span>годна до 23 июля · ещё 12 дней</span></div>
+        <div class="pr">119 ₽</div>
+      </div>
+      <div class="opt" id="optB" onclick="pick('B')">
+        <div class="rad"></div>
+        <div class="tx"><b>Съем сегодня-завтра</b><span>годна до 13 июля · ещё 2 дня</span></div>
+        <div class="pr">95 ₽<span class="off">−20%</span><s>119 ₽</s></div>
+      </div>
+      <div class="note">📷 Сборщик отсканирует срок годности вашей партии — дата придёт в электронном чеке. Не совпало — вернём деньги мгновенно.</div>
+      <button class="ybtn" onclick="closeSheet()">Готово</button>
+    </div>
+  </section>
+
+  <!-- S3 CART -->
+  <section class="screen" id="s3">
+    <div class="scroll">
+      <div class="hdr"><div class="rnd" onclick="goto('s2')">←</div><h2>Корзина</h2><div class="rnd">🗑</div></div>
+      <div class="eta"><b>15–25 мин, доставка 0 ₽</b><span>до бесплатной доставки — выполнено</span></div>
+
+      <div class="fresh-toggle on nw" id="ftg" onclick="toggleFresh()">
+        <div class="ico" style="font-size:22px">🌿</div>
+        <div class="tx"><b>Привезти самое свежее</b><span id="ftgSub">Сборщик выберет партии с максимальным сроком годности</span></div>
+        <div class="sw2"></div>
+      </div>
+
+      <div class="citem">
+        <div class="im">🥛</div>
+        <div class="tx">
+          <div class="nm">Молоко «Домик в деревне» 3,2%, 930 мл</div>
+          <div class="pw" id="cartMilk">119 ₽</div>
+          <div class="fresh g nw fchip"><i class="dot"></i><span>до 23 июля</span></div>
+        </div>
+        <div class="cnt"><span>−</span>1<span>+</span></div>
+      </div>
+      <div class="citem">
+        <div class="im">🍮</div>
+        <div class="tx">
+          <div class="nm">Творог 5% «Из Лавки», 250 г</div>
+          <div class="pw">149 ₽</div>
+          <div class="fresh g nw fchip"><i class="dot"></i><span>до 20 июля</span></div>
+        </div>
+        <div class="cnt"><span>−</span>1<span>+</span></div>
+      </div>
+      <div class="citem">
+        <div class="im">🥞</div>
+        <div class="tx">
+          <div class="nm">Сырники «Из Лавки», 300 г</div>
+          <div class="pw">215 ₽<s>269 ₽</s></div>
+          <div class="fresh o nw"><i class="dot"></i><span>до 12 июля · вы выбрали −20%</span></div>
+        </div>
+        <div class="cnt"><span>−</span>1<span>+</span></div>
+      </div>
+      <div class="srow">Упаковка заказа<span>29 ₽</span></div>
+    </div>
+    <div class="bbar" onclick="goto('s4');scanRun()">
+      <span class="p">15–25 мин</span>
+      <span class="lbl">К оплате</span>
+      <span class="cnt" id="total">512 ₽</span>
+    </div>
+  </section>
+
+  <!-- S4 ORDER -->
+  <section class="screen" id="s4">
+    <div class="scroll">
+      <div class="prog">
+        <div class="st done">✓</div><div class="ln done"></div>
+        <div class="st act">📦</div><div class="ln"></div>
+        <div class="st">🚴</div><div class="ln"></div>
+        <div class="st">🏁</div>
+      </div>
+      <div class="ocen"><h2>Собираем заказ</h2><p>Приедет через 15–25 минут</p></div>
+
+      <div class="scan nw">
+        <div class="cap">🌿 Свежесть партий <span class="ok" style="margin-left:auto;font-size:13px">сканируем…</span></div>
+        <div class="sitem"><span class="em">🥛</span><div class="tx">Молоко «Домик в деревне»<span>партия до 23 июля</span></div><span class="ck">✓</span></div>
+        <div class="sitem"><span class="em">🍮</span><div class="tx">Творог «Из Лавки»<span>партия до 20 июля</span></div><span class="ck">✓</span></div>
+        <div class="sitem"><span class="em">🥞</span><div class="tx">Сырники «Из Лавки» · −20%<span>партия до 12 июля — съешьте сегодня-завтра</span></div><span class="ck">✓</span></div>
+        <div class="foot">Даты всех партий придут в электронном чеке. Привезли не то, что обещали, — мгновенный возврат без переписки с поддержкой.</div>
+      </div>
+
+      <div class="btnrow">
+        <button class="gbtn">Чат поддержки</button>
+        <button class="ybtn" onclick="goto('s1')">В каталог</button>
+      </div>
+    </div>
+  </section>
+
+</div></div>
+
+<script>
+  const glass = document.getElementById('glass');
+  function goto(id){
+    document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on', s.id===id));
+    document.querySelectorAll('.step').forEach(st=>st.classList.toggle('on', st.dataset.go===id));
+    closeSheet();
+    document.querySelector('#'+id+' .scroll').scrollTop = 0;
+    if(id==='s4') scanRun();
+  }
+  document.querySelectorAll('.step').forEach(st=>st.addEventListener('click',()=>goto(st.dataset.go)));
+
+  function openSheet(){ glass.classList.add('sheet-open'); }
+  function closeSheet(){ glass.classList.remove('sheet-open'); }
+
+  function pick(which){
+    const A = which==='A';
+    document.getElementById('optA').classList.toggle('sel', A);
+    document.getElementById('optB').classList.toggle('sel', !A);
+    document.getElementById('fBig').textContent = A ? 'Годен ещё 12 дней' : 'Годен ещё 2 дня · −20%';
+    document.getElementById('fSub').textContent = A ? 'до 23 июля · привезём эту партию' : 'до 13 июля · выгодно, если съедите сразу';
+    document.getElementById('fcard').classList.toggle('short', !A);
+    document.getElementById('pPrice').innerHTML = A ? '119 ₽' : '95 ₽ <s>119 ₽</s>';
+    document.getElementById('cartMilk').innerHTML = A ? '119 ₽' : '95 ₽<s>119 ₽</s>';
+    document.getElementById('total').textContent = A ? '512 ₽' : '488 ₽';
+    const chip = document.querySelector('#s3 .citem .fresh');
+    chip.className = 'fresh ' + (A?'g':'o') + ' nw fchip';
+    chip.querySelector('span').textContent = A ? 'до 23 июля' : 'до 13 июля · −20%';
+  }
+
+  function toggleFresh(){
+    const t = document.getElementById('ftg');
+    t.classList.toggle('on');
+    document.getElementById('ftgSub').textContent = t.classList.contains('on')
+      ? 'Сборщик выберет партии с максимальным сроком годности'
+      : 'Выключено: подойдёт любая партия с нормальным сроком';
+  }
+
+  let scanTimer=null;
+  function scanRun(){
+    const cks = document.querySelectorAll('#s4 .ck');
+    cks.forEach(c=>c.classList.remove('show'));
+    clearTimeout(scanTimer);
+    let i=0;
+    (function next(){
+      if(i<cks.length){ cks[i++].classList.add('show'); scanTimer=setTimeout(next,700); }
+      else{ const cap=document.querySelector('#s4 .cap .ok'); cap.textContent='подтверждена ✓'; }
+    })();
+    document.querySelector('#s4 .cap .ok').textContent='сканируем…';
+  }
+</script>
+</body>
+</html>
