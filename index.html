@@ -106,7 +106,7 @@
 
   /* product */
   .crumbs{display:flex;gap:6px;margin:6px 0 10px;align-items:center}
-  .crumb{background:#fff;border-radius:100px;padding:8px 12px;font-size:12.5px;color:#6B6763;font-weight:500}
+  .crumb{background:#fff;border-radius:100px;padding:8px 12px;font-size:12.5px;color:#6B6763;font-weight:500;white-space:nowrap}
   .pico{margin-left:auto;display:flex;gap:8px}
   .pico .rnd{flex:0 0 40px;height:40px}
   .hero{background:#fff;border-radius:24px;height:238px;display:flex;align-items:center;justify-content:center;margin-bottom:6px}
@@ -493,6 +493,7 @@ const totQty = () => Object.values(P).reduce((s,p)=>s+p.qty,0);
 const delivery = () => subtotal() >= FREE_FROM ? 0 : 119;
 const total = () => subtotal() + PACK + delivery();
 const plural = d => d%10==1&&d%100!=11?'день':(d%10>=2&&d%10<=4&&(d%100<10||d%100>=20)?'дня':'дней');
+const pluralCoin = n => n%10==1&&n%100!=11?'монетка':(n%10>=2&&n%10<=4&&(n%100<10||n%100>=20)?'монетки':'монеток');
 
 let toastT=null;
 function toast(msg){
@@ -623,7 +624,7 @@ function renderCart(){
   const anyShort = items().some(([,p])=>p.sel>0);
   body.innerHTML =
     '<div class="eta"><b>'+etaTitle+'</b><span class="togo">'+etaSub+'</span><div class="pbar"><i style="width:'+pct+'%"></i></div></div>'+
-    '<div class="coinrow"><div class="cn"><svg width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="9" fill="#F2C230"/><circle cx="11" cy="11" r="6" fill="#FFDE6E"/></svg></div><div><b>'+coins+' монеток после доставки</b><span>Ещё 150 за каждые 2 000 ₽</span></div><div class="pz press" onclick="toast(\'Призы — вне сценария прототипа\')">Призы ›</div></div>'+
+    '<div class="coinrow"><div class="cn"><svg width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="9" fill="#F2C230"/><circle cx="11" cy="11" r="6" fill="#FFDE6E"/></svg></div><div><b>'+coins+' '+pluralCoin(coins)+' после доставки</b><span>Ещё 150 за каждые 2 000 ₽</span></div><div class="pz press" onclick="toast(\'Призы — вне сценария прототипа\')">Призы ›</div></div>'+
     '<div class="ftg nw '+(freshestOn?'on':'')+'" onclick="toggleFreshest()">'+
       '<svg width="24" height="24" viewBox="0 0 20 20" fill="none"><path d="M4 12c4-1 7-4 8.5-8.5C13.5 8 12 14 4 12z" fill="#00B45A"/></svg>'+
       '<div class="tx"><b>Привезти самое свежее</b><span>'+(freshestOn?'Сборщик выберет партии с максимальным сроком годности':(anyShort?'Выключено: у части позиций выбран короткий срок со скидкой':'Выключено: партии можно выбирать вручную'))+'</span></div>'+
