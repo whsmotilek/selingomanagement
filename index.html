@@ -44,6 +44,12 @@
   .hl-toggle .sw::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.2s}
   body.hl .hl-toggle .sw{background:var(--accent)}
   body.hl .hl-toggle .sw::after{left:19px}
+  .resume{display:flex;gap:14px;align-items:center;background:#fff;border-radius:16px;padding:12px 14px;margin-top:16px;text-decoration:none;color:var(--ink);border:1px solid #E3DFDA;transition:.15s}
+  .resume:hover{box-shadow:0 4px 14px rgba(0,0,0,.07)}
+  .resume img{width:84px;height:84px;border-radius:8px;flex:0 0 84px}
+  .resume b{display:block;font-size:14px;font-weight:700;margin-bottom:3px}
+  .resume span{font-size:12px;color:var(--sub);line-height:1.4;display:block}
+  .resume .lnk{color:#1B73D3;font-weight:500;margin-top:4px}
   .aside .foot{margin-top:20px;font-size:12px;color:#8B8783;line-height:1.5}
 
   /* подсветка новых элементов — рамка по форме элемента, не вылезает за соседей */
@@ -309,6 +315,10 @@
     <div class="step" data-go="s5"><span class="n">5</span><div><b>Заказ</b><span>сборщик сканирует партии — даты в чеке</span></div></div>
   </div>
   <label class="hl-toggle" onclick="document.body.classList.toggle('hl')"><span class="sw"></span>Подсветить новые элементы</label>
+  <a class="resume" href="https://drive.google.com/file/d/16sF5N0i1Gk8G8KW3UpVdCUmY7XETxuzO/view?usp=sharing" target="_blank" rel="noopener">
+    <img src="data:image/png;base64,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" alt="QR: резюме Матвея Селина">
+    <div><b>Резюме — Матвей Селин</b><span>Наведите камеру или нажмите, чтобы открыть PDF</span><span class="lnk">Открыть резюме →</span></div>
+  </a>
   <p class="foot">Кейс для стажировки «Go в менеджмент» · Матвей Селин<br>Кликабельно всё: товары, степперы, партии, поиск, Лавка AI, чаевые, оплата.</p>
 </aside>
 
